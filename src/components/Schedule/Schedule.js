@@ -17,6 +17,20 @@ const Schedule = () => {
     const [selectedType, setSelectedType] = useState();
     const [displayType, setDisplayType] = useState("time");
 
+    const setDisplayTypeActions = (type) => {
+        switch(type){
+            case "time":
+
+                break;
+
+            case "category":
+                setSelectedType(Object.keys(typesItems)[0]);
+                setSelectedDay(Object.keys(typesItems[Object.keys(typesItems)[0]])[0]);
+                break;
+
+        }   
+
+    }
 
     const getTimeItems = (_data) => {
         let sorted = _data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
@@ -52,15 +66,16 @@ const Schedule = () => {
             let day = moment(activity.start, 'YYYY-MM-DD HH:mm').format("DD/MM");
             if(types_items[activity.type][day] === undefined)
                 types_items[activity.type][day] = {};
-            if(types_items[activity.type][day][activity.location] === undefined)
-                types_items[activity.type][day][activity.location] = {};
-            if(types_items[activity.type][day][activity.location][activity.id] === undefined)
-                types_items[activity.type][day][activity.location][activity.id] = {};             
+            // if(types_items[activity.type][day][activity.location] === undefined)
+            //     types_items[activity.type][day][activity.location] = {};
+            if(types_items[activity.type][day][activity.id] === undefined)
+                types_items[activity.type][day][activity.id] = {};             
             activity.range = (moment(activity.end, 'YYYY-MM-DD HH:mm').unix() - moment(activity.start, 'YYYY-MM-DD HH:mm').unix()) / 3600;
-            types_items[activity.type][day][activity.location][activity.id] = activity;
+            types_items[activity.type][day][activity.id] = activity;
         });
-        console.log(types_items);
+        
         setTypesItems(types_items);
+        console.log(types_items);
 
     }
 
@@ -88,7 +103,6 @@ const Schedule = () => {
                     <button onClick={() => {setDisplayType("category")}} className={displayType == "category" ? 'active' : ''}>Category</button>
                 </div>
             </div>
-
             {displayType == "time" ?
             <div className="time_display">
                 <div className="days">
@@ -148,12 +162,78 @@ const Schedule = () => {
 
 
             {displayType == "category" ?
+            <span>
 
-                                        <div>ddd</div>
+                { typesItems != undefined ?
+                    <div className="types">
+                        <div className="types_box">
+                            {Object.keys(typesItems).map((type_i) =>
+                            <button
+                                className={selectedType == type_i ? 'active' : ''}
+                                onClick={() => {
+                                    setSelectedType(type_i);
+                                }}
+                                key={type_i}
+                                >
+                                {data.activity_type[type_i].title}
+                            </button>
+                            )}
+                        </div>
+                    </div>
+                    : null }
 
 
+                { typesItems[selectedType] != undefined ?
+                <div className="days">
+                    <div className="days_box">
+                        {Object.keys(typesItems[selectedType]).map((day_i) =>
+                        <button
+                            className={selectedDay == day_i ? 'active' : ''}
+                            onClick={() => {setSelectedDay(day_i)}}
+                            key={day_i}
+                            >
+                            {day_i}
+                        </button>
+                        )}
+                        <button onClick={() => {setSelectedDay("all")}}>All</button>
+                    </div>
+                </div>
+                : null }
+
+                { typesItems[selectedType] != undefined ?
+                <span>
+                { typesItems[selectedType][selectedDay] != undefined ?
+                <span>
+                    { typesItems[selectedType][selectedDay] != undefined ?
+                        <div className="activities">
+                            <div className="activities_box">
+                                {Object.keys(typesItems[selectedType][selectedDay]).map((activity_i) =>
+                                <span key={activity_i}>
+                                    
+                                    <ActivityTeaser key={activity_i} item={typesItems[selectedType][selectedDay][activity_i]}></ActivityTeaser>
+                                    
+                                </span>
+                                )}
+                            </div>
+                        </div>
+                    : null }
+                    </span>
+                : null }
+                </span>
+                : null }
+
+
+
+
+
+
+
+
+
+
+                </span>
             : null }
-
+            
 
         </div>
     );
