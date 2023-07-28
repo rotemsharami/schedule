@@ -1,0 +1,26 @@
+1.Header
+    1.Menu
+    2.Logo
+    3.Language
+    2.Now Activities slider
+2.Content
+    1.General
+        1.Now Activities slider
+            1.Image
+            2.Title
+            3.Location
+            4.Description
+            5.Time
+            6.Go
+            7.More Details
+        2.Next Activities
+        3.Premoted Activities
+        4.Premoted Products & Services
+    2.Schedule
+        1.Activites by location & time
+    3.News & Updates
+        1.Image
+        2.Title
+        4.Description
+        5.Time
+3.Footer

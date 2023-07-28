@@ -1,0 +1,63 @@
+.ActivityTeaser{
+    background-color: #acf3ff;
+    float: left;
+    width: 100%;
+    margin-bottom: 2px;
+    padding: 10px 10px 10px 10px;
+    .info_item{
+        float: left;
+    }
+    .time{
+        text-align: center;
+        width: 70px;
+        .time_item{
+            line-height: 20px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .icon{
+            line-height: 13px;
+        }
+    }
+    .type{
+        display: block;
+        .type_box{
+            text-align: center;
+            width: 100px;
+            padding: 0px 10px 0px 10px;
+
+            .title{
+                font-size: 13px;
+            }
+            .icon{
+
+            }
+        }
+    }
+    .image_box{
+        .image_background{
+            width: 70px;
+            height: 70px;
+            background-position: center !important;
+            background-size: cover !important;
+        }
+    }
+    .title_and_description{
+        padding: 0px 10px 0px 10px;
+        .title{
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .description{
+            font-size: 15px;
+        }
+    }
+    .location{
+        .icon{
+        
+        }
+        .location_text{
+
+        }
+    }
+}

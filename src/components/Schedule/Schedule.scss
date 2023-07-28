@@ -1,0 +1,76 @@
+.schedule {
+    .display_type{
+        padding: 10px;
+        background: #9fccd4;
+        width: 100%;
+        .display_type_box{
+            margin: 0 auto;
+            display: table;
+
+            button{
+                border: 0px;
+            }
+            button.active{
+                background: #2c3f3e;
+                color: #FFF;
+            }
+        }
+
+    }
+    .days{
+        padding: 10px;
+        background: #b9e7f0;
+        width: 100%;
+        .types_box,
+        .days_box{
+            margin: 0 auto;
+            display: table;
+            button{
+                border: 0px;
+                border-radius: 40px;
+                padding: 0px 10px 1px 10px;
+                background: #486564;
+                color: #d8ffff;
+                font-weight: bold;
+                margin-right: 10px;
+                min-width: 72px;
+            }
+            button.active{
+                background: #2c3f3e;
+            }
+        }
+    }
+    .types{
+        padding: 10px;
+        background: #9fccd4;
+        width: 100%;
+
+        .types_box{
+            margin: 0 auto;
+            display: table;
+            button{
+                border: 0px;
+                border-radius: 40px;
+                padding: 0px 10px 1px 10px;
+                background: #486564;
+                color: #d8ffff;
+                font-weight: bold;
+                margin-right: 10px;
+                min-width: 72px;
+            }
+            button.active{
+                background: #2c3f3e;
+            }
+
+        }
+    }
+    .activities{
+        
+        .activities_box{
+
+            
+        }
+    }
+
+
+}
