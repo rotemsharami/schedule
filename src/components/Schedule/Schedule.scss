@@ -1,4 +1,15 @@
 .schedule {
+
+    .time_display .day_title{
+        background: #2c3f3e;
+        color: #FFF;
+        text-align: left;
+        font-size: 18px;
+        padding: 4px 0px 0px 10px;
+        float: left;
+        width: 100%;
+    }
+    
     .display_type{
         padding: 10px;
         background: #9fccd4;
@@ -9,6 +20,12 @@
 
             button{
                 border: 0px;
+                padding: 0px 10px 1px 10px;
+                background: #486564;
+                color: #d8ffff;
+                font-weight: bold;
+                margin-right: 0px;
+                min-width: 72px;
             }
             button.active{
                 background: #2c3f3e;
