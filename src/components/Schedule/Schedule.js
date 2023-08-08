@@ -10,7 +10,7 @@ import ActivityTeaser from '../ActivityTeaser/ActivityTeaser';
 import { BsFillAlarmFill } from "react-icons/bs";
 
 const Schedule = () => {
-    const [data, setData] = useState();
+    const [data, setData] = useState({});
     const [timeItems, setTimeItems] = useState([]);
     const [typesItems, setTypesItems] = useState([]);
     const [typesItemsByDays, setTypesItemsByDays] = useState([]);
@@ -22,6 +22,9 @@ const Schedule = () => {
     const [displayByTimeAllsDays, setDisplayByTimeAllsDays] = useState(true);
     const [displayByTimeAllsDaysAndAllTypes, setDisplayByTimeAllsDaysAndAllTypes] = useState(true);
     const [displayByTimeAllsTypes, setDisplayByTimeAllsTypes] = useState(true);
+
+    const [selectedTimeItems, setSelectedTimeItems] = useState([]);
+
 
     const [selectedDays, setSelectedDays] = useState([]);
 
@@ -58,42 +61,55 @@ const Schedule = () => {
     }
 
     
-    const setSelectedDaysArray = (day) => {
-        let new_array = selectedDays;
-        if (new_array.indexOf(day) !== -1)
-            new_array.splice(new_array.indexOf(day), 1);
-        else
-            new_array.push(day);
-        setSelectedDays(new_array);
+    const setSelectedDaysArray = (index) => {
+        let new_array = [];
+        let arr = selectedDays;
+        if (selectedDays.includes(index)){
+            console.log("In");
+            setSelectedDays((last) => last.filter((item) => item != index));
+        }
+        else{
+            console.log("Not in");
+            setSelectedDays([ ...selectedDays, index]);
+        }
 
-        console.log(selectedDays);
+        getTimeItems();
+
     }
 
 
 
-    const getTimeItems = (_data) => {
-        let sorted = _data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
+    const getTimeItems = () => {
+        let sorted = data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
+        
+        console.log(selectedDays);
+        
         let time_items = {}; 
         sorted.forEach(element => {
             let day = moment(element.start, 'YYYY-MM-DD HH:mm').format("DD/MM");
-            if(time_items[day] === undefined){
-                time_items[day] = {};
-                let day_activities = _data.activeities.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
-                let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
-                sorted_day_activities.forEach(activity => {
-                    if(time_items[day][activity.type] === undefined)
-                        time_items[day][activity.type] = {};
-                    if(time_items[day][activity.type][activity.id] === undefined)
-                        time_items[day][activity.type][activity.id] = {};
-                    activity.range = (moment(activity.end, 'YYYY-MM-DD HH:mm').unix() - moment(activity.start, 'YYYY-MM-DD HH:mm').unix()) / 3600;
-                    time_items[day][activity.type][activity.id] = activity;
-                });
+            if(selectedDays.includes(day) || selectedDays.length == 0){
+                if(time_items[day] === undefined){
+                    time_items[day] = {};
+                    let day_activities = data.activeities.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
+                    let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
+                    sorted_day_activities.forEach(activity => {
+                        if(time_items[day][activity.type] === undefined)
+                            time_items[day][activity.type] = {};
+                        if(time_items[day][activity.type][activity.id] === undefined)
+                            time_items[day][activity.type][activity.id] = {};
+                        activity.range = (moment(activity.end, 'YYYY-MM-DD HH:mm').unix() - moment(activity.start, 'YYYY-MM-DD HH:mm').unix()) / 3600;
+                        time_items[day][activity.type][activity.id] = activity;
+                    });
+                }
             }
         });
 
         
 
         setTimeItems(time_items);
+
+        console.log(time_items);
+
         return time_items;
     }
 
@@ -142,23 +158,46 @@ const Schedule = () => {
         });
         setTypesItems(types_items);
     }
+
+    let setActiveDay = (dayI) => {
+        return selectedDays.includes(dayI) ? 'active' : '';
+    }
+
+
 	useEffect(() => {
         let allData = getData();
-        setData(allData);
-        let time_itemss = getTimeItems(allData);
-        let types_items = getTypesItems(allData);
+        //setData([...data, allData]);
 
-        let sorted_items = getSortedItems(allData);
+        //setData(data => [...data, ...allData]);
+
+
+        setData(data => {
+            let jasper = Object.assign({}, data.jasper);  // creating copy of state variable jasper
+            jasper = allData;                     // update the name property, assign a new value                 
+            return { jasper };                                 // return new object jasper object
+        });
+
+
+        console.log(data);
+
+
+        //console.log(allData);
+
+        //let time_itemss = getTimeItems(allData);
+        // let types_items = getTypesItems(allData);
+
+        // let sorted_items = getSortedItems(allData);
 
         
 
 
-        let dayIndex = Object.keys(time_itemss)[0];
-        setSelectedDay(dayIndex);
-        let typeIndex = Object.keys(time_itemss[dayIndex])[0];
-        setSelectedType(typeIndex);
-        let locationIndex = Object.keys(time_itemss[dayIndex][typeIndex])[0];
-        setSelectedLocation(locationIndex);
+        // let dayIndex = Object.keys(time_itemss)[0];
+        // setSelectedDay(dayIndex);
+        // let typeIndex = Object.keys(time_itemss[dayIndex])[0];
+        // setSelectedType(typeIndex);
+        // let locationIndex = Object.keys(time_itemss[dayIndex][typeIndex])[0];
+        // setSelectedLocation(locationIndex);
+
 	}, []);
     return(
         <div className="schedule">
@@ -170,13 +209,13 @@ const Schedule = () => {
                             {Object.keys(timeItems).map((day_i) =>
                                 <button
                                     // className={(selectedDay == day_i && displayByTimeAllsDays == false) ? 'active' : ''}
-                                    className={selectedDays.includes(day_i) ? 'active' : ''}
+                                    className={setActiveDay(day_i)}
                                     onClick={() => {
                                         setSelectedDay(day_i);
 
                                         setSelectedDaysArray(day_i);
 
-                                        setDisplayByTimeAllsDays(false);
+                                        //setDisplayByTimeAllsDays(false);
                                     }}
                                     key={day_i}
                                     >
