@@ -25,16 +25,6 @@ const ActivityTeaser = (item) => {
 						{moment(item.item.end, "YYYY-MM-dd HH:mm").format("HH:mm")}
 					</div>
 				</div>
-				<div className='type info_item'>
-					<div className='type_box info_item'>
-						<div className='icon'>
-							<MusicNoteBeamed/>
-						</div>
-						<div className='title'>
-							{data.activity_type[item.item.type].title}
-						</div>
-					</div>
-				</div>
 				<div className='image_box info_item'>
 					<div
 						className='image_background'
@@ -46,9 +36,16 @@ const ActivityTeaser = (item) => {
 					<div className='title'>
 						{item.item.title}
 					</div>
+
+					<div className='type_box'>
+						<span className='icon'><MusicNoteBeamed/></span> <span className='type_name'>{data.activity_type[item.item.type].title}</span>
+					</div>
+
+{/* 
 					<div className='description'>
 						{item.item.description}
-					</div>
+					</div> */}
+
 					<div className='location'>
 						<span className='icon'><GeoAltFill/></span> <span className='location_text'>{data.locations[item.item.location].title}</span>
 					</div>

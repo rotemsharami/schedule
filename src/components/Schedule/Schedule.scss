@@ -45,12 +45,13 @@
             button{
                 border: 0px;
                 border-radius: 40px;
-                padding: 0px 10px 1px 10px;
+                padding: 17px 0px 17px 0px;
                 background: #486564;
                 color: #d8ffff;
                 font-weight: bold;
+                font-size: 17px;
                 margin-right: 10px;
-                min-width: 72px;
+                min-width: 62px;
             }
             button.active{
                 background: #2c3f3e;
@@ -66,17 +67,20 @@
             margin: 0 auto;
             display: table;
             button{
-                border: 0px;
-                border-radius: 40px;
+                border-radius: 10px;
                 padding: 0px 10px 1px 10px;
-                background: #486564;
-                color: #d8ffff;
+                border: 3px solid #486564;
+                color: #486564;
                 font-weight: bold;
                 margin-right: 10px;
-                min-width: 72px;
+                min-width: 110px;
+                background: none;
+                height: 62px;
             }
             button.active{
                 background: #2c3f3e;
+                color: #FFF;
+                border-color: #0ff;
             }
 
         }

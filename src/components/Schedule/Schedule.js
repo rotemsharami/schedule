@@ -4,6 +4,11 @@ import {getData} from "../../tools/data";
 import moment from 'moment';
 import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity } from "react-bootstrap-icons";
 import ActivityTeaser from '../ActivityTeaser/ActivityTeaser';
+
+
+
+import { BsFillAlarmFill } from "react-icons/bs";
+
 const Schedule = () => {
     const [data, setData] = useState();
     const [timeItems, setTimeItems] = useState([]);
@@ -17,6 +22,8 @@ const Schedule = () => {
     const [displayByTimeAllsDays, setDisplayByTimeAllsDays] = useState(true);
     const [displayByTimeAllsDaysAndAllTypes, setDisplayByTimeAllsDaysAndAllTypes] = useState(true);
     const [displayByTimeAllsTypes, setDisplayByTimeAllsTypes] = useState(true);
+
+    const [selectedDays, setSelectedDays] = useState([]);
 
 
     const [sortedItems, setSortedItems] = useState({});
@@ -49,6 +56,20 @@ const Schedule = () => {
         return sorted_object;
 
     }
+
+    
+    const setSelectedDaysArray = (day) => {
+        let new_array = selectedDays;
+        if (new_array.indexOf(day) !== -1)
+            new_array.splice(new_array.indexOf(day), 1);
+        else
+            new_array.push(day);
+        setSelectedDays(new_array);
+
+        console.log(selectedDays);
+    }
+
+
 
     const getTimeItems = (_data) => {
         let sorted = _data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
@@ -98,7 +119,7 @@ const Schedule = () => {
 
         setSortedItems(sorted_data);
 
-        console.log(sorted_data);
+        
 
         
 
@@ -129,6 +150,9 @@ const Schedule = () => {
 
         let sorted_items = getSortedItems(allData);
 
+        
+
+
         let dayIndex = Object.keys(time_itemss)[0];
         setSelectedDay(dayIndex);
         let typeIndex = Object.keys(time_itemss[dayIndex])[0];
@@ -138,21 +162,20 @@ const Schedule = () => {
 	}, []);
     return(
         <div className="schedule">
-            <div className="display_type">
-                <div className="display_type_box">
-                    <button onClick={() => {setDisplayType("time")}} className={displayType == "time" ? 'active' : ''}>Time</button>
-                    <button onClick={() => {setDisplayType("category")}} className={displayType == "category" ? 'active' : ''}>Category</button>
-                </div>
-            </div>
+
             {displayType == "time" ?
                 <div className="time_display">
                     <div className="days">
                         <div className="days_box">
                             {Object.keys(timeItems).map((day_i) =>
                                 <button
-                                    className={(selectedDay == day_i && displayByTimeAllsDays == false) ? 'active' : ''}
+                                    // className={(selectedDay == day_i && displayByTimeAllsDays == false) ? 'active' : ''}
+                                    className={selectedDays.includes(day_i) ? 'active' : ''}
                                     onClick={() => {
                                         setSelectedDay(day_i);
+
+                                        setSelectedDaysArray(day_i);
+
                                         setDisplayByTimeAllsDays(false);
                                     }}
                                     key={day_i}
@@ -160,13 +183,6 @@ const Schedule = () => {
                                     {day_i}
                                 </button>
                             )}
-                            <button onClick={() => {
-                                if(displayByTimeAllsDays == false)
-                                    setDisplayByTimeAllsDays(true);
-                                }}
-                                className={displayByTimeAllsDays ? "active" : ""}
-                                >All
-                            </button>
                         </div>
                     </div>
                     { timeItems[selectedDay] != undefined ?
@@ -181,7 +197,9 @@ const Schedule = () => {
                                         }}
                                         key={type_i}
                                         >
-                                        {data.activity_type[type_i].title}
+                                        <div><BsFillAlarmFill/></div>
+                                        <div>{data.activity_type[type_i].title}</div>
+                                        
                                     </button>
                                 )}
                                 <button onClick={() => {
@@ -238,10 +256,6 @@ const Schedule = () => {
                             : null }
                         </span>
                     : null }
-
-
-
-
                     { displayByTimeAllsDays && displayByTimeAllsDaysAndAllTypes == false ?
                         <span>
                             { typesItems[selectedType] != undefined ?
@@ -281,62 +295,6 @@ const Schedule = () => {
                         </span>
                     : null }
                 </div>
-            : null }
-            {displayType == "category" ?
-                <span>
-                    { typesItems != undefined ?
-                        <div className="types">
-                            <div className="types_box">
-                                {Object.keys(typesItems).map((type_i) =>
-                                    <button
-                                        className={selectedType == type_i ? 'active' : ''}
-                                        onClick={() => {
-                                            setSelectedType(type_i);
-                                        }}
-                                        key={type_i}
-                                        >
-                                        {data.activity_type[type_i].title}
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    : null }
-                    { typesItems[selectedType] != undefined ?
-                        <div className="days">
-                            <div className="days_box">
-                                {Object.keys(typesItems[selectedType]).map((day_i) =>
-                                    <button
-                                        className={selectedDay == day_i ? 'active' : ''}
-                                        onClick={() => {setSelectedDay(day_i)}}
-                                        key={day_i}
-                                        >
-                                        {day_i}
-                                    </button>
-                                )}
-                                <button onClick={() => {setSelectedDay("all")}}>All</button>
-                            </div>
-                        </div>
-                    : null }
-                    { typesItems[selectedType] != undefined ?
-                        <span>
-                            { typesItems[selectedType][selectedDay] != undefined ?
-                                <span>
-                                    { typesItems[selectedType][selectedDay] != undefined ?
-                                        <div className="activities">
-                                            <div className="activities_box">
-                                                {Object.keys(typesItems[selectedType][selectedDay]).map((activity_i) =>
-                                                    <span key={activity_i}>
-                                                        <ActivityTeaser key={activity_i} item={typesItems[selectedType][selectedDay][activity_i]}></ActivityTeaser>
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </div>
-                                    : null }
-                                </span>
-                            : null }
-                        </span>
-                    : null }
-                </span>
             : null }
         </div>
     );
