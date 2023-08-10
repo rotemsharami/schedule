@@ -10,7 +10,7 @@ import ActivityTeaser from '../ActivityTeaser/ActivityTeaser';
 import { BsFillAlarmFill } from "react-icons/bs";
 
 const Schedule = () => {
-    const [data, setData] = useState({});
+    const [data, setData] = useState();
     const [timeItems, setTimeItems] = useState([]);
     const [typesItems, setTypesItems] = useState([]);
     const [typesItemsByDays, setTypesItemsByDays] = useState([]);
@@ -80,9 +80,16 @@ const Schedule = () => {
 
 
     const getTimeItems = () => {
-        let sorted = data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
         
-        console.log(selectedDays);
+        
+
+        if(data.data.activeities != undefined){
+
+            
+
+        let sorted = data.data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
+        
+        
         
         let time_items = {}; 
         sorted.forEach(element => {
@@ -90,7 +97,7 @@ const Schedule = () => {
             if(selectedDays.includes(day) || selectedDays.length == 0){
                 if(time_items[day] === undefined){
                     time_items[day] = {};
-                    let day_activities = data.activeities.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
+                    let day_activities = data.data.activeities.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
                     let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
                     sorted_day_activities.forEach(activity => {
                         if(time_items[day][activity.type] === undefined)
@@ -108,9 +115,9 @@ const Schedule = () => {
 
         setTimeItems(time_items);
 
-        console.log(time_items);
+        
 
-        return time_items;
+        }
     }
 
 
@@ -165,20 +172,22 @@ const Schedule = () => {
 
 
 	useEffect(() => {
-        let allData = getData();
+        let allData = {};
+        allData = getData();
         //setData([...data, allData]);
 
         //setData(data => [...data, ...allData]);
 
+        
 
-        setData(data => {
-            let jasper = Object.assign({}, data.jasper);  // creating copy of state variable jasper
-            jasper = allData;                     // update the name property, assign a new value                 
-            return { jasper };                                 // return new object jasper object
-        });
+        if(data == undefined){
+            setData({...data ,data:allData});
+            
+        }
 
-
-        console.log(data);
+        if(data != undefined){
+            getTimeItems();
+        }
 
 
         //console.log(allData);
@@ -198,7 +207,7 @@ const Schedule = () => {
         // let locationIndex = Object.keys(time_itemss[dayIndex][typeIndex])[0];
         // setSelectedLocation(locationIndex);
 
-	}, []);
+	}, [data]);
     return(
         <div className="schedule">
 
