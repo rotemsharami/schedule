@@ -11,6 +11,10 @@ import { BsFillAlarmFill } from "react-icons/bs";
 
 const Schedule = () => {
     const [data, setData] = useState();
+
+    const [days, setDays] = useState([]);
+
+
     const [timeItems, setTimeItems] = useState([]);
     const [typesItems, setTypesItems] = useState([]);
     const [typesItemsByDays, setTypesItemsByDays] = useState([]);
@@ -65,57 +69,45 @@ const Schedule = () => {
         let new_array = [];
         let arr = selectedDays;
         if (selectedDays.includes(index)){
-            console.log("In");
             setSelectedDays((last) => last.filter((item) => item != index));
         }
         else{
-            console.log("Not in");
             setSelectedDays([ ...selectedDays, index]);
         }
 
-        getTimeItems();
+        
 
+        getTimeItems();
     }
 
 
 
     const getTimeItems = () => {
-        
-        
-
         if(data.data.activeities != undefined){
+            let sorted = data.data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
+            let time_items = {};
+            sorted.forEach(element => {
+                let day = moment(element.start, 'YYYY-MM-DD HH:mm').format("DD/MM");
+                if(selectedDays.includes(day) || selectedDays.length == 0){
+                    if(time_items[day] === undefined){
+                        time_items[day] = {};
+                        let day_activities = data.data.activeities.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
+                        let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
+                        sorted_day_activities.forEach(activity => {
+                            if(time_items[day][activity.type] === undefined)
+                                time_items[day][activity.type] = {};
+                            if(time_items[day][activity.type][activity.id] === undefined)
+                                time_items[day][activity.type][activity.id] = {};
+                            activity.range = (moment(activity.end, 'YYYY-MM-DD HH:mm').unix() - moment(activity.start, 'YYYY-MM-DD HH:mm').unix()) / 3600;
+                            time_items[day][activity.type][activity.id] = activity;
+                        });
+                    }
+                }
+                
+            });
+            setTimeItems(time_items);
 
             
-
-        let sorted = data.data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
-        
-        
-        
-        let time_items = {}; 
-        sorted.forEach(element => {
-            let day = moment(element.start, 'YYYY-MM-DD HH:mm').format("DD/MM");
-            if(selectedDays.includes(day) || selectedDays.length == 0){
-                if(time_items[day] === undefined){
-                    time_items[day] = {};
-                    let day_activities = data.data.activeities.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
-                    let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
-                    sorted_day_activities.forEach(activity => {
-                        if(time_items[day][activity.type] === undefined)
-                            time_items[day][activity.type] = {};
-                        if(time_items[day][activity.type][activity.id] === undefined)
-                            time_items[day][activity.type][activity.id] = {};
-                        activity.range = (moment(activity.end, 'YYYY-MM-DD HH:mm').unix() - moment(activity.start, 'YYYY-MM-DD HH:mm').unix()) / 3600;
-                        time_items[day][activity.type][activity.id] = activity;
-                    });
-                }
-            }
-        });
-
-        
-
-        setTimeItems(time_items);
-
-        
 
         }
     }
@@ -171,22 +163,32 @@ const Schedule = () => {
     }
 
 
+    let _setDays = ()=> {
+        let sorted = data.data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
+        let time_items = {};
+        sorted.forEach(element => {
+            let day = moment(element.start, 'YYYY-MM-DD HH:mm').format("DD/MM");
+            if(selectedDays.includes(day) || selectedDays.length === 0){
+                if(time_items[day] === undefined){
+                    time_items[day] = {};
+                }
+            }
+        });
+        setDays(Object.keys(time_items));
+    } 
+
+
+
 	useEffect(() => {
         let allData = {};
         allData = getData();
-        //setData([...data, allData]);
-
-        //setData(data => [...data, ...allData]);
-
-        
-
-        if(data == undefined){
+        if(data === undefined){
             setData({...data ,data:allData});
-            
         }
 
         if(data != undefined){
             getTimeItems();
+            _setDays();
         }
 
 
@@ -215,19 +217,12 @@ const Schedule = () => {
                 <div className="time_display">
                     <div className="days">
                         <div className="days_box">
-                            {Object.keys(timeItems).map((day_i) =>
+                            {days.map((day_i) =>
                                 <button
-                                    // className={(selectedDay == day_i && displayByTimeAllsDays == false) ? 'active' : ''}
                                     className={setActiveDay(day_i)}
-                                    onClick={() => {
-                                        setSelectedDay(day_i);
-
-                                        setSelectedDaysArray(day_i);
-
-                                        //setDisplayByTimeAllsDays(false);
-                                    }}
+                                    onClick={() => {setSelectedDaysArray(day_i);}}
                                     key={day_i}
-                                    >
+                                >
                                     {day_i}
                                 </button>
                             )}
