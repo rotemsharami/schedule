@@ -163,22 +163,37 @@ const Schedule = () => {
         return selectedDays.includes(dayI) ? 'active' : '';
     }
 
+    const setOfData = (info) => {
+        setData( data => ({
+            ...info
+        }));
+        console.log(data);
+    }
+
+
 
 	useEffect(() => {
-        let allData = getData();
-        //setData([...data, allData]);
+        setOfData(getData());
+        //setData({...data, a:allData});
 
         //setData(data => [...data, ...allData]);
 
-
-        setData(data => {
-            let jasper = Object.assign({}, data.jasper);  // creating copy of state variable jasper
-            jasper = allData;                     // update the name property, assign a new value                 
-            return { jasper };                                 // return new object jasper object
-        });
+        // setData({
+        //     ...data,
+        //     b: allData
+        //   });
 
 
-        console.log(data);
+
+
+
+
+
+
+
+
+
+        //console.log(data);
 
 
         //console.log(allData);
