@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import {React, useState, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import './ActivityTeaser.scss';
 import {getData} from "../../tools/data";
@@ -7,11 +7,18 @@ import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity } from "react-bootstra
 
 const ActivityTeaser = (item) => {
 	const [data, setData] = useState(getData());
-	// useEffect(() => {
-    //     let allData = getData();
-	// }, []);
+
+	
+
+	const _zoomInToActivity = useCallback(() => {
+		item.displayChange(true);
+		item.idActivity(item.item.id);
+	  }, [item.displayChange, item.idActivity]);
+
+
+	
 	return(
-		<div className="ActivityTeaser">
+		<button className="ActivityTeaser" onClick={()=>_zoomInToActivity()}>
 			
 			<div className='activity'>
 				<div className='time info_item'>
@@ -41,17 +48,12 @@ const ActivityTeaser = (item) => {
 						<span className='icon'><MusicNoteBeamed/></span> <span className='type_name'>{data.activity_type[item.item.type].title}</span>
 					</div>
 
-{/* 
-					<div className='description'>
-						{item.item.description}
-					</div> */}
-
 					<div className='location'>
 						<span className='icon'><GeoAltFill/></span> <span className='location_text'>{data.locations[item.item.location].title}</span>
 					</div>
 				</div>
 			</div>
-		</div>
+		</button>
 	);
 };
 export default ActivityTeaser;

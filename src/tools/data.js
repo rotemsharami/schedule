@@ -241,7 +241,16 @@ export function getData() {
                 "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrMRBIjAVdE4Q9LfS9lxd3uk2MR9iurCXy2A&usqp=CAU"
             },
 
-
+            {
+                "id": "18",
+                "title": "Trip",
+                "type": "2",
+                "start": "2023-01-24 14:00",
+                "end": "2023-01-24 17:00",
+                "location": "2",
+                "description": "Let's burn up the dance floor with a crazy party until the wee hours of the night",
+                "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrMRBIjAVdE4Q9LfS9lxd3uk2MR9iurCXy2A&usqp=CAU"
+            },
     
 
     
