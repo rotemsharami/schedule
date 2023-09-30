@@ -1,4 +1,4 @@
-import {React, useEffect, useState} from 'react';
+import {React, useEffect, useState, useRef} from 'react';
 import './Schedule.scss';
 import {getData} from "../../tools/data";
 import moment from 'moment';
@@ -6,6 +6,8 @@ import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity } from "react-bootstra
 import ActivityTeaser from '../ActivityTeaser/ActivityTeaser';
 import FullActivity from '../FullActivity/FullActivity';
 import { BsFillAlarmFill } from "react-icons/bs";
+import { motion, AnimatePresence } from "framer-motion";
+
 
 const Schedule = () => {
     const [data, setData] = useState();
@@ -17,6 +19,12 @@ const Schedule = () => {
 
     const [zoomInToActivity, setZoomInToActivity] = useState(false);
     const [fullActivityId, setFullActivityId] = useState("1");
+
+
+	const windowSize = useRef([window.innerWidth, window.innerHeight]);
+	
+	console.log(windowSize.current[0]);
+
 
     let getAvailableDays = async () => {
         let sorted = data.data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
@@ -203,16 +211,28 @@ const Schedule = () => {
 
     return(
         <div className="schedule">
-
-            {zoomInToActivity === true ?
-                <FullActivity id={fullActivityId} displayChange={setZoomInToActivity}></FullActivity>
-            : null }
-
+            <AnimatePresence>
+                {zoomInToActivity === true ?
+                    <motion.div
+                    initial={{ x: windowSize.current[0]*-1 }}
+                    animate={{x: 0}}
+                    exit={{ x: windowSize.current[0]*-1 }}
+                    transition={{ duration: 0.2 }}
+                    >
+                    <FullActivity id={fullActivityId} displayChange={setZoomInToActivity}></FullActivity>
+                    </motion.div>
+                : null }
+            </AnimatePresence>
             {/* <div>{ JSON.stringify(selectedDays, null, 2) }</div> */}
             
+            <AnimatePresence>
             {zoomInToActivity === false ?
-            
-            <div className="time_display">
+            <motion.div
+                initial={{ x: windowSize.current[0]*-1 }}
+                animate={{ x: 0 }}
+                exit={{ x: windowSize.current[0]*-1 }}
+                transition={{ duration: 0.2 }}
+            className="time_display">
                 <div className="days">
                     {availableDays != undefined ?
                     <div className="days_box">
@@ -266,8 +286,9 @@ const Schedule = () => {
                     )}
                 </span>
             : null }
-            </div>
+            </motion.div>
             : null }
+            </AnimatePresence>
         </div>
     );
 };

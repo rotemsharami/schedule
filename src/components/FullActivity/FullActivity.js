@@ -4,7 +4,7 @@ import "../ActivityTeaser/ActivityTeaser.scss";
 import {getData} from "../../tools/data";
 import moment from 'moment';
 import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity } from "react-bootstrap-icons";
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion";
 
 const FullActivity = (id) => {
 	const [data, setData] = useState(getData());
@@ -24,8 +24,8 @@ const FullActivity = (id) => {
 	
 	return(
 		<motion.div 
-		animate={{ opacity: 0 }}
-		transition={{ ease: [0.17, 0.67, 0.83, 0.67] }}
+
+		
 		>
 		<div className="ActivityTeaser">
 			
