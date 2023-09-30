@@ -1,15 +1,17 @@
-import {React, useState, useCallback} from 'react';
+import {React, useState, useCallback, useRef} from 'react';
 import PropTypes from 'prop-types';
 import "../ActivityTeaser/ActivityTeaser.scss";
 import {getData} from "../../tools/data";
 import moment from 'moment';
 import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity } from "react-bootstrap-icons";
+import { motion } from "framer-motion"
 
 const FullActivity = (id) => {
 	const [data, setData] = useState(getData());
 
+	const windowSize = useRef([window.innerWidth, window.innerHeight]);
 	
-
+	console.log(windowSize.current[0]);
 
     let item = data.activeities.filter(item=>item.id == id.id)[0];
 
@@ -21,6 +23,10 @@ const FullActivity = (id) => {
 	  }, [id.displayChange]);
 	
 	return(
+		<motion.div 
+		animate={{ opacity: 0 }}
+		transition={{ ease: [0.17, 0.67, 0.83, 0.67] }}
+		>
 		<div className="ActivityTeaser">
 			
 			<div className='activity'>
@@ -69,6 +75,7 @@ const FullActivity = (id) => {
 				</div>
 			</div>
 		</div>
+		</motion.div>
 	);
 };
 export default FullActivity;
