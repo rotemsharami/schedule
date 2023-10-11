@@ -7,7 +7,7 @@ import ActivityTeaser from '../ActivityTeaser/ActivityTeaser';
 import FullActivity from '../FullActivity/FullActivity';
 import { BsFillAlarmFill } from "react-icons/bs";
 import { motion, AnimatePresence } from "framer-motion";
-
+import axios from 'axios';
 
 const Schedule = () => {
     const [data, setData] = useState();
@@ -23,11 +23,12 @@ const Schedule = () => {
 
 	const windowSize = useRef([window.innerWidth, window.innerHeight]);
 	
-	console.log(windowSize.current[0]);
 
+    
 
     let getAvailableDays = async () => {
-        let sorted = data.data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
+        console.log(data);
+        let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
         let _days = {};
         sorted.forEach(element => {
             let day = moment(element.start, 'YYYY-MM-DD HH:mm').format("DD/MM");
@@ -82,8 +83,8 @@ const Schedule = () => {
     }
 
     let getTimeLine = async () => {
-        if(data.data.activeities != undefined){
-            let sorted = data.data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
+        if(data.data.activities != undefined){
+            let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
             let time_line = {};
 
             console.log();
@@ -114,7 +115,7 @@ const Schedule = () => {
     
 
     let dataToTimeLine = () => {
-        let sorted = data.data.activeities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
+        let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
         let time_line = {};
         sorted.forEach(element => {
             let day = moment(element.start, 'YYYY-MM-DD HH:mm').format("DD/MM");
@@ -175,11 +176,30 @@ const Schedule = () => {
 
 
 	useEffect(() => {
-        if(data === undefined)
-            setData({data:getData()});
+
+
+
+
+
+
+        if(data === undefined){
+            
+
+            axios.get('http://schedule.rotem/en/activities')
+            .then(response => {
+                setData({data:response.data.data});
+                console.log(response.data.data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+
+
+
+        }
+
         if(data != undefined){
             start();
-
         }
 	}, [data]);
 
@@ -219,7 +239,7 @@ const Schedule = () => {
                     exit={{ x: windowSize.current[0]*-1 }}
                     transition={{ duration: 0.2 }}
                     >
-                    <FullActivity id={fullActivityId} displayChange={setZoomInToActivity}></FullActivity>
+                    <FullActivity id={fullActivityId} data={data} displayChange={setZoomInToActivity}></FullActivity>
                     </motion.div>
                 : null }
             </AnimatePresence>
@@ -250,6 +270,7 @@ const Schedule = () => {
                 </div>
             
                 <div className="types">
+                
                     <div className="types_box">
                         {availableTypes.map((type_i) =>
                             <button
@@ -262,6 +283,7 @@ const Schedule = () => {
                             </button>
                         )}
                     </div>
+                
                 </div>
             
             { timeLine != undefined ?
@@ -275,7 +297,7 @@ const Schedule = () => {
                                     <div className="activities_box" key={type_i}>
                                         {Object.keys(timeLine[day_i][type_i]).map((activity_i) =>
                                             <span key={activity_i}>
-                                                <ActivityTeaser key={activity_i} item={timeLine[day_i][type_i][activity_i]} displayChange={setZoomInToActivity} idActivity={setFullActivityId}></ActivityTeaser>
+                                                <ActivityTeaser key={activity_i} item={timeLine[day_i][type_i][activity_i]} data={data} displayChange={setZoomInToActivity} idActivity={setFullActivityId}></ActivityTeaser>
                                             </span>
                                         )}
                                     </div>

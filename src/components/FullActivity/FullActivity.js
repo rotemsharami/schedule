@@ -11,11 +11,11 @@ const FullActivity = (id) => {
 
 	const windowSize = useRef([window.innerWidth, window.innerHeight]);
 	
-	console.log(windowSize.current[0]);
+	//console.log(id.data.data.activities);
 
-    let item = data.activeities.filter(item=>item.id == id.id)[0];
+    let item = id.data.data.activities.filter(item=>item.id == id.id)[0];
 
-    console.log(id);
+    
 
 
 	const _zoomInToActivity = useCallback(() => {
@@ -54,11 +54,11 @@ const FullActivity = (id) => {
 					</div>
 
 					<div className='type_box'>
-						<span className='icon'><MusicNoteBeamed/></span> <span className='type_name'>{data.activity_type[item.type].title}</span>
+						<span className='icon'><MusicNoteBeamed/></span> <span className='type_name'>{id.data.data.activity_type[item.type].title}</span>
 					</div>
 
 					<div className='location'>
-						<span className='icon'><GeoAltFill/></span> <span className='location_text'>{data.locations[item.location].title}</span>
+						<span className='icon'><GeoAltFill/></span> <span className='location_text'>{id.data.data.locations[item.location].title}</span>
 					</div>
 
 

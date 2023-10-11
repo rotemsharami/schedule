@@ -3,7 +3,6 @@ export function getData() {
 
 
     const data = {
-        ProjectName:"Balagan Festival 2023",
         "activeities": [
 
             {

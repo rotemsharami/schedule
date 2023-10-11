@@ -45,11 +45,11 @@ const ActivityTeaser = (item) => {
 					</div>
 
 					<div className='type_box'>
-						<span className='icon'><MusicNoteBeamed/></span> <span className='type_name'>{data.activity_type[item.item.type].title}</span>
+						<span className='icon'><MusicNoteBeamed/></span> <span className='type_name'>{item.data.data.activity_type[item.item.type].title}</span>
 					</div>
 
 					<div className='location'>
-						<span className='icon'><GeoAltFill/></span> <span className='location_text'>{data.locations[item.item.location].title}</span>
+						<span className='icon'><GeoAltFill/></span> <span className='location_text'>{item.data.data.locations[item.item.location].title}</span>
 					</div>
 				</div>
 			</div>
