@@ -81,6 +81,15 @@ const FullActivity = (obj) => {
 		setItem(obj.data.data.activities.filter(item=>item.id == index)[0]);
 	  }, [obj.setFullActivityId, obj.fullActivityId]);
 
+	  const handleDragEnd = (event, info) => {
+		if (info.point.x > 150) {
+		  // Perform an action when dragged beyond a certain point
+		  console.log("Swiped!");
+		  nextActivity();
+		}
+	  };
+
+
 
 	
 	return(
@@ -111,6 +120,10 @@ const FullActivity = (obj) => {
 								animate={{ x: "0px" }}
 								exit={{ x: ((windowSize.current[1])*2) + 'px' }}
 								transition={{ duration: 0.5 }}
+								drag="x"
+								dragConstraints={{ left: 0, right: 300 }}
+								onDragEnd={handleDragEnd}
+
 								>
 									<div className='image_box col-4'>
 										<div
