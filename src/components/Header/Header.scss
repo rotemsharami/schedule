@@ -1,12 +1,14 @@
 .header {
-    background-color: aqua;
+    
     .menu_button{
         text-align: center;
     }
-    .logo_and_app_name{
+    .logo_and_app_name {
         text-align: center;
-        color: #4e6d73;
-        font-size: 30px;
+        color: #ffffff;
+        font-size: 40px;
+        font-weight: bold;
+        text-shadow: 0 0 3px #000000, 0 0 5px #0000FF;
     }
     .languag{
         text-align: center;

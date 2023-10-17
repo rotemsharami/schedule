@@ -8,6 +8,7 @@ import FullActivity from '../FullActivity/FullActivity';
 import { BsFillAlarmFill } from "react-icons/bs";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from 'axios';
+import Header from '../Header/Header';
 
 const Schedule = () => {
     const [data, setData] = useState();
@@ -27,7 +28,6 @@ const Schedule = () => {
     
 
     let getAvailableDays = async () => {
-        console.log(data);
         let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
         let _days = {};
         sorted.forEach(element => {
@@ -87,7 +87,7 @@ const Schedule = () => {
             let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
             let time_line = {};
 
-            console.log();
+            
 
             sorted.forEach(element => {
                 let day = moment(element.start, 'YYYY-MM-DD HH:mm').format("DD/MM");
@@ -188,7 +188,6 @@ const Schedule = () => {
             axios.get('http://schedule.rotem/en/activities')
             .then(response => {
                 setData({data:response.data.data});
-                console.log(response.data.data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -231,60 +230,50 @@ const Schedule = () => {
 
     return(
         <div className="schedule">
-            <AnimatePresence>
-                {zoomInToActivity === true ?
-                    <motion.div
-                    initial={{ x: windowSize.current[0]*-1 }}
-                    animate={{x: 0}}
-                    exit={{ x: windowSize.current[0]*-1 }}
-                    transition={{ duration: 0.2 }}
-                    >
-                    <FullActivity id={fullActivityId} data={data} displayChange={setZoomInToActivity}></FullActivity>
-                    </motion.div>
-                : null }
-            </AnimatePresence>
             {/* <div>{ JSON.stringify(selectedDays, null, 2) }</div> */}
-            
-            <AnimatePresence>
-            {zoomInToActivity === false ?
-            <motion.div
-                initial={{ x: windowSize.current[0]*-1 }}
-                animate={{ x: 0 }}
-                exit={{ x: windowSize.current[0]*-1 }}
-                transition={{ duration: 0.2 }}
-            className="time_display">
-                <div className="days">
-                    {availableDays != undefined ?
-                    <div className="days_box">
-                        {availableDays.map((day_i) =>
-                            <button
-                                className={selectedDays.includes(day_i) ? 'active' : ''}
-                                onClick={() => {changeDays(day_i)}}
-                                key={day_i}
-                            >
-                                {day_i}
-                            </button>
-                        )}
-                    </div>
-                    : null }
-                </div>
-            
-                <div className="types">
-                
-                    <div className="types_box">
-                        {availableTypes.map((type_i) =>
-                            <button
-                                className={selectedTypes.includes(type_i) ? 'active' : ''}
-                                onClick={() => { changeTypes(type_i)}}
-                                key={type_i}
+            {data != undefined ?
+            <div
+                className="section_1"
+                style={{ 
+                    backgroundImage: `url(`+data.data.general_data.image+`)` 
+                }}
+                >
+                <Header data={data}></Header>
+                {zoomInToActivity === true ?
+                    <FullActivity timeLine={timeLine} fullActivityId={fullActivityId} data={data} displayChange={setZoomInToActivity} setFullActivityId={setFullActivityId}></FullActivity>
+                : null }
+                    <div className="days">
+                        {availableDays != undefined ?
+                        <div className="days_box">
+                            {availableDays.map((day_i) =>
+                                <button
+                                    className={selectedDays.includes(day_i) ? 'active' : ''}
+                                    onClick={() => {changeDays(day_i)}}
+                                    key={day_i}
                                 >
-                                <div><BsFillAlarmFill/></div>
-                                <div>{data.data.activity_type[type_i].title}</div>
-                            </button>
-                        )}
+                                    {day_i}
+                                </button>
+                            )}
+                        </div>
+                        : null }
                     </div>
-                
+            
+                    <div className="types">
+                        <div className="types_box">
+                            {availableTypes.map((type_i) =>
+                                <button
+                                    className={selectedTypes.includes(type_i) ? 'active' : ''}
+                                    onClick={() => { changeTypes(type_i)}}
+                                    key={type_i}
+                                    >
+                                    <div><BsFillAlarmFill/></div>
+                                    <div>{data.data.activity_type[type_i].title}</div>
+                                </button>
+                            )}
+                        </div>
+                    </div>
                 </div>
+                : null}
             
             { timeLine != undefined ?
                 <span>
@@ -308,9 +297,7 @@ const Schedule = () => {
                     )}
                 </span>
             : null }
-            </motion.div>
-            : null }
-            </AnimatePresence>
+            
         </div>
     );
 };
