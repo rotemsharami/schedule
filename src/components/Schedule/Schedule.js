@@ -185,7 +185,7 @@ const Schedule = () => {
         if(data === undefined){
             
 
-            axios.get('http://schedule.rotem/en/activities')
+            axios.get('https://schedule.latinet.co.il/en/activities')
             .then(response => {
                 setData({data:response.data.data});
             })

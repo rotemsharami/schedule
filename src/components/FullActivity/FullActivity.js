@@ -12,6 +12,13 @@ const FullActivity = (obj) => {
 	const [item, setItem] = useState(obj.data.data.activities.filter(item=>item.id == obj.fullActivityId)[0]);
 
 	const windowSize = useRef([window.innerWidth, window.innerHeight]);
+	const [initialD, setInitialD] = useState("-"+windowSize.current[1] + 'px');
+	const [exitD, setExitD] = useState(((windowSize.current[1])*2) + 'px');
+
+	
+
+
+	
 	
 	//console.log(obj.data.data.activities);
 
@@ -28,18 +35,6 @@ const FullActivity = (obj) => {
 
 	let sorted = activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
 
-	
-	console.log(sorted);
-
-	
-	
-
-
-
-	// const nextActivity = () => {
-	// 	console.log(id);
-	// }
-
 	const previewActivity = () => {
 	
 	}
@@ -54,6 +49,11 @@ const FullActivity = (obj) => {
 
 
 	  const nextActivity = useCallback(() => {
+
+		setInitialD(((windowSize.current[1])*2) + 'px');
+		setExitD("-"+windowSize.current[1] + 'px');
+
+
 		let k = null;
 		sorted.forEach((element, key) => {
 			if(obj.fullActivityId == element.id){
@@ -62,13 +62,16 @@ const FullActivity = (obj) => {
 		});
 		let index = k+1 >= (sorted.length) ? sorted[0].id : sorted[k+1].id;
 		obj.setFullActivityId(index);
-		console.log(k+1);
-
 		setItem(obj.data.data.activities.filter(item=>item.id == index)[0]);
 
 	  }, [obj.setFullActivityId, obj.fullActivityId]);
 
 	  const prevActivity = useCallback(() => {
+
+
+		setInitialD("-"+windowSize.current[1] + 'px');
+		setExitD(((windowSize.current[1])*2) + 'px');
+
 		
 		let k = null;
 		sorted.forEach((element, key) => {
@@ -82,10 +85,10 @@ const FullActivity = (obj) => {
 	  }, [obj.setFullActivityId, obj.fullActivityId]);
 
 	  const handleDragEnd = (event, info) => {
-		if (info.point.x > 150) {
-		  // Perform an action when dragged beyond a certain point
-		  console.log("Swiped!");
-		  nextActivity();
+		if (info.offset.x < 0) {
+		  	nextActivity();
+		}else{
+			prevActivity();
 		}
 	  };
 
@@ -109,6 +112,16 @@ const FullActivity = (obj) => {
 						<button className="preview" onClick={()=>prevActivity()}>
 							<div className="preview_next_inner"><span className="button_icon"><CaretLeftFill/></span></div>
 						</button>
+
+						<div
+						
+								style={{
+									overflow:"hidden",
+									width:"100%"
+								}}
+						
+						>
+
 						
 						<AnimatePresence 
             				mode='wait'
@@ -116,12 +129,12 @@ const FullActivity = (obj) => {
 							<motion.div
 								className="activity_info_box row"
 								key={item.id}
-								initial={{ x: "-"+windowSize.current[1] + 'px' }}
+								initial={{ x:  initialD}}
 								animate={{ x: "0px" }}
-								exit={{ x: ((windowSize.current[1])*2) + 'px' }}
+								exit={{ x: exitD }}
 								transition={{ duration: 0.5 }}
 								drag="x"
-								dragConstraints={{ left: 0, right: 300 }}
+								//dragConstraints={{ left: 0, right: 300 }}
 								onDragEnd={handleDragEnd}
 
 								>
@@ -158,6 +171,11 @@ const FullActivity = (obj) => {
 								</div>
 							</motion.div>
 						</AnimatePresence>
+
+
+								</div>
+
+
 						<button className="next" onClick={()=>nextActivity()}>
 							<div className="preview_next_inner"><span className="button_icon"><CaretRightFill/></span></div>
 						</button>
