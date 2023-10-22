@@ -1,7 +1,22 @@
 .header {
-    
+    background-color: #25403f;
+    .header_box{
+        padding: 0px;
+        padding-right: 0px;
+        padding-left: 0px;
+        margin-right: 0px;
+        margin-left: 0px;
+    }
     .menu_button{
         text-align: center;
+        color: white;
+        font-size: 35px;
+        button{
+            background: none;
+            border: 0px;
+            color: #FFF;
+        }
+    
     }
     .logo_and_app_name {
         text-align: center;
@@ -12,6 +27,9 @@
     }
     .languag{
         text-align: center;
+        color: #FFF;
+        font-size: 20px;
+        padding: 13px 0px 0px 0px;
     }
 
 

@@ -2,21 +2,29 @@ import {React, useEffect, useState, useRef} from 'react';
 import './Schedule.scss';
 import {getData} from "../../tools/data";
 import moment from 'moment';
-import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity } from "react-bootstrap-icons";
+import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity, FilterCircleFill } from "react-bootstrap-icons";
 import ActivityTeaser from '../ActivityTeaser/ActivityTeaser';
 import FullActivity from '../FullActivity/FullActivity';
-import { BsFillAlarmFill } from "react-icons/bs";
+import { BsFillAlarmFill} from "react-icons/bs";
+
+
+
 import { motion, AnimatePresence } from "framer-motion";
 import axios from 'axios';
 import Header from '../Header/Header';
 
-const Schedule = () => {
+const Schedule = (item) => {
+
+    
+
     const [data, setData] = useState();
     const [availableDays, setAvailableDays] = useState([]);
     const [timeLine, setTimeLine] = useState({});
     const [availableTypes, setAvailableTypes] = useState([]);
     const [selectedDays, setSelectedDays] = useState([]);
     const [selectedTypes, setSelectedTypes] = useState([]);
+
+    const [showFilters, setShowFilters] = useState(false);
 
     const [zoomInToActivity, setZoomInToActivity] = useState(false);
     const [fullActivityId, setFullActivityId] = useState("1");
@@ -178,22 +186,26 @@ const Schedule = () => {
 	useEffect(() => {
 
 
-
+        // if(item.data.data != undefined){
+        //     setData({data:item.data.data});
+        // }
 
 
 
         if(data === undefined){
             
 
-            axios.get('https://schedule.latinet.co.il/en/activities')
-            .then(response => {
-                setData({data:response.data.data});
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
+            // axios.get('https://schedule.latinet.co.il/en/activities')
+            // .then(response => {
+            //     setData({data:response.data.data});
+                
+            // })
+            // .catch(error => {
+            //     console.error('Error fetching data:', error);
+            // });
 
-
+            setData({data:item.data.data});
+            // console.log(item);
 
         }
 
@@ -224,24 +236,36 @@ const Schedule = () => {
         }
 	}, [selectedTypes]);
 
+    
 
 
 
 
     return(
         <div className="schedule">
+            <div className='general_title'>
+                <div className='general_title_text'>Schedule</div>
+                <div className='general_title_buttun'>
+                    <button onClick={() => {setShowFilters(showFilters == false ? true : false)}}>
+                        <span className="button_icon"><FilterCircleFill/></span><span className='button_text'>Filter</span>
+                    </button>
+                </div>
+            </div>
             {/* <div>{ JSON.stringify(selectedDays, null, 2) }</div> */}
-            {data != undefined ?
+
+            {zoomInToActivity === true ?
+                    <FullActivity timeLine={timeLine} fullActivityId={fullActivityId} data={data} displayChange={setZoomInToActivity} setFullActivityId={setFullActivityId}></FullActivity>
+                : null }
+
+            {data != undefined  && showFilters ?
             <div
                 className="section_1"
                 style={{ 
                     backgroundImage: `url(`+data.data.general_data.image+`)` 
                 }}
                 >
-                <Header data={data}></Header>
-                {zoomInToActivity === true ?
-                    <FullActivity timeLine={timeLine} fullActivityId={fullActivityId} data={data} displayChange={setZoomInToActivity} setFullActivityId={setFullActivityId}></FullActivity>
-                : null }
+                
+
                     <div className="days">
                         {availableDays != undefined ?
                         <div className="days_box">

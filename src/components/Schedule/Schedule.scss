@@ -1,5 +1,38 @@
 .schedule {
-
+    .general_title{
+        padding: 0px 10px 0px 10px;
+        font-size: 26px;
+        width: 100%;
+        float: left;
+        width: 100%;
+        background: #90f5ff;
+        .general_title_text{
+            float: left;
+        }
+        .general_title_buttun{
+            button{
+                border: 0px;
+                padding: 0px 6px 2px 5px;
+                background: #ffffff;
+                color: #25403f;
+                display: flex;
+                margin-top: 6px;
+                border: 2px solid #25403f;
+                border-bottom: 0px;
+                border-radius: 7px 7px 0px 0px;
+            }
+            float: right;
+            .button_text{
+                font-weight: bold;
+                font-size: 20px;
+            }
+            .button_icon{
+                font-size: 20px;
+                margin: -2px 5px 0px 0px;
+            }
+        }
+        width: 100%;
+    }
     .day_title{
         background: #2c3f3e;
         color: #FFF;
@@ -11,6 +44,7 @@
     }
 
     .section_1{
+        float: left;
         background-size: cover;
         background-position: 0px -432px;
         padding: 10px;

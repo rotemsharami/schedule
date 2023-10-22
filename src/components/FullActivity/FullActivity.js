@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import "./FullActivity.scss";
 import {getData} from "../../tools/data";
 import moment from 'moment';
-import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity, ClockFill, CalendarEventFill, XCircleFill, CaretLeftFill, CaretRightFill} from "react-bootstrap-icons";
+import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity, ClockFill, CalendarEventFill, XCircleFill, CaretLeftFill, CaretRightFill, CursorFill} from "react-bootstrap-icons";
 import { motion, AnimatePresence } from "framer-motion";
 
 import DivCarusel from '../DivCarusel/DivCarusel';
@@ -12,12 +12,18 @@ const FullActivity = (obj) => {
 	const [item, setItem] = useState(obj.data.data.activities.filter(item=>item.id == obj.fullActivityId)[0]);
 
 	const windowSize = useRef([window.innerWidth, window.innerHeight]);
-	const [initialD, setInitialD] = useState("-"+windowSize.current[1] + 'px');
-	const [exitD, setExitD] = useState(((windowSize.current[1])*2) + 'px');
+	const [initialD, setInitialD] = useState(((windowSize.current[1])*2) + 'px');
+	const [exitD, setExitD] = useState("-"+windowSize.current[1] + 'px');
 
 	
 
-
+	const getLatLonObject = (string) => {
+		let res = {
+			lat : string.split(",")[0],
+			lon : string.split(",")[1]
+		}
+		return res;
+	}
 	
 	
 	//console.log(obj.data.data.activities);
@@ -137,24 +143,28 @@ const FullActivity = (obj) => {
 								//dragConstraints={{ left: 0, right: 300 }}
 								onDragEnd={handleDragEnd}
 
+								style={{ height: (windowSize.current[1]-100) + 'px' }}
+
 								>
-									<div className='image_box col-4'>
+									<div className='image_box col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4'>
 										<div
 											className='image_background'
 											style={{background:`url(${item.image}) no-repeat center center`}}
 										>
 										</div>
 									</div>
-									<div className='info_box col-8'>
+									<div className='info_box col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8'>
 										<div className='title'>
 											{item.title}
 										</div>
 
 										<div className='time'>
-											<span className='icon'><CalendarEventFill/></span> {moment(item.day).format("D/M")} <span className='icon'><ClockFill/></span> {moment(item.start, "YYYY-MM-dd HH:mm").format("HH:mm")}-{moment(item.end, "YYYY-MM-dd HH:mm").format("HH:mm")}
+											<span className='time_item'><span className='icon'><CalendarEventFill/></span><span className='time_text'>{moment(item.day).format("D/M")}</span></span><span className='time_item'><span className='icon'><ClockFill/></span><span className='time_text'>{moment(item.start, "YYYY-MM-dd HH:mm").format("HH:mm")}-{moment(item.end, "YYYY-MM-dd HH:mm").format("HH:mm")}</span></span>
 										</div>
 										<div className='location'>
-											<span className='icon'><GeoAltFill/></span> <span className='location_text'>{obj.data.data.locations[item.location].title}</span>
+											<span className='location_item'><span className='icon'><GeoAltFill/></span><span className='location_text'>{obj.data.data.locations[item.location].title}</span></span><span className='location_item'><span className='icon'><CursorFill/></span><a className='location_text' href={'https://maps.google.com/?q=<'+getLatLonObject(obj.data.data.locations[178].lat_lon).lat+'>,<'+getLatLonObject(obj.data.data.locations[178].lat_lon).lon+'>'}>Navigate</a></span>
+
+
 										</div>			
 
 										<div className='description'>

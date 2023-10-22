@@ -48,6 +48,41 @@
         .title{
             font-size: 36px;
         }
+        .time{
+            width: 100%;
+            float: left;
+            .time_item{
+                float: left;
+                margin: 0px 10px 0px 0px;
+                .icon{
+                    font-size: 12px;
+                    color: #818181;
+                    margin: 2px 4px 0px 0px;
+                    float: left;
+                }
+                .time_text{
+                    float: left;
+                }
+            }
+        }
+        .location{
+            width: 100%;
+            float: left;
+            .location_item{
+                float: left;
+                margin: 0px 10px 0px 0px;
+
+                .icon{
+                    font-size: 12px;
+                    color: #818181;
+                    margin: 2px 4px 0px 0px;
+                    float: left;
+                }
+                .location_text{
+                    float: left;
+                }
+            }
+        }
     }
     .one_button{
         float: left;
@@ -77,8 +112,19 @@
 
 
 @media (max-width: 767px) and (orientation: portrait) {
-    .full_activity .full_activity_container {
+    .full_activity
+        .full_activity_container {
         width: 100%;
         margin-top: 0px;
+        .full_activity_box .preview,
+        .full_activity_box .next {
+            width: 30px;
+        }
+        .activity_info_box{
+            display: block !important;
+            .info_box{
+                padding: 0px 20px 0px 20px;
+            }
+        }
     }
 }
