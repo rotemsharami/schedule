@@ -37,19 +37,19 @@ function App() {
             <motion.div
                initial={{ x:  "-100%"}}
                animate={{ x: showMenu ? "0" : "-100%"}}
-               exit={{ x: showMenu ? "30%" : "0"}}
+               exit={{ x: showMenu ? (windowSize.current[0] >= 767 ? "30%" : "80%") : "0"}}
                transition={{ duration: 0.4 }}
-               style={{position:"absolute", width:"30%"}}
+               style={{position:"fixed", width:(windowSize.current[0] >= 767 ? "30%" : "80%"), top: "60px"}}
          >
                <Menu></Menu>
             </motion.div>
          {data != undefined && (
             <motion.div
             initial={{ x:  "0"}}
-            animate={{ x: showMenu ? "30%" : "0"}}
-            exit={{ x: showMenu ? "30%" : "0"}}
+            animate={{ x: showMenu ? (windowSize.current[0] >= 767 ? "30%" : "80%") : "0"}}
+            exit={{ x: showMenu ? (windowSize.current[0] >= 767 ? "30%" : "80%") : "0"}}
             transition={{ duration: 0.4 }}
-            style={{position:"absolute", width:"100%"}}
+            style={{position:"absolute", width:"100%", top: "60px"}}
             >
                <Content data={data}></Content>
             </motion.div>
