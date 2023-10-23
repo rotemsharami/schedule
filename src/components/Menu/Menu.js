@@ -18,7 +18,7 @@ const Menu = (item) => {
 	return(
 		<div
 			className="Menu"
-			style={{ height: (windowSize.current[1]) + 'px' }}
+			style={{ height: (windowSize.current[1]) -60 + 'px' }}
 		>
 			<div className='items'>
 				<button className='item'>

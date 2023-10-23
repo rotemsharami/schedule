@@ -38,7 +38,7 @@ function App() {
                initial={{ x:  "-100%"}}
                animate={{ x: showMenu ? "0" : "-100%"}}
                exit={{ x: showMenu ? "30%" : "0"}}
-               transition={{ duration: 0.5 }}
+               transition={{ duration: 0.4 }}
                style={{position:"absolute", width:"30%"}}
          >
                <Menu></Menu>
@@ -48,7 +48,7 @@ function App() {
             initial={{ x:  "0"}}
             animate={{ x: showMenu ? "30%" : "0"}}
             exit={{ x: showMenu ? "30%" : "0"}}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
             style={{position:"absolute", width:"100%"}}
             >
                <Content data={data}></Content>

@@ -1,7 +1,7 @@
 import {React, useState, useCallback} from 'react';
 import './Header.scss';
-import { List } from "react-bootstrap-icons";
 import {getData} from "../../tools/data";
+import {List, ArrowDown, MusicNoteBeamed, GeoAltFill, Activity, ClockFill, CalendarEventFill, XCircleFill, CaretLeftFill, CaretRightFill, CursorFill} from "react-bootstrap-icons";
 
 const Header = (info) => {
 const [data, setData] = useState(getData());
@@ -21,7 +21,7 @@ return(
 		>
 		<div className='menu_button col-2'>
 			<button onClick={() => {menuToggle()}}>
-				<List />
+				{info.showMenu ? <XCircleFill/> : <List />} 
 			</button>
 		</div>
 		<div className='logo_and_app_name col-8'>{info.data.title}</div>
