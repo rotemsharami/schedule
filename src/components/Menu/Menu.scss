@@ -1,3 +1,29 @@
 .Menu {
     background-color: aqua;
+    border-right: 20px #000 solid;
+    .items{
+        display: flex;
+        
+        
+        .item{
+            display: flex;
+            border: 0px;
+            border-bottom: 1px solid #000;
+            padding: 20px;
+            width: 100%;
+            background: #07dddd;
+            .icon{
+                font-size: 30px;
+                top: -6px;
+                position: relative;
+                .the_icon{
+                    font-size: 30px;
+                }
+            }
+            .text{
+                padding: 0px 0px 0px 10px;
+                font-size: 30px;
+            }
+        }
+    }
 }
