@@ -30,43 +30,31 @@ function App() {
  }, [data]);
 
    return (
-      <div>
-
-         
+      <div style={{"overflow-x": "hidden"}}>    
          {data != undefined ? 
          <Header data={data.data.general_data} setShowMenu={setShowMenu} showMenu={showMenu}></Header>
          : null}
-
-         
-         <AnimatePresence mode='wait'>
-         {showMenu && (
             <motion.div
-               initial={{ x:  "-50%"}}
-               animate={{ x: "0" }}
-               exit={{ x: "-50%" }}
+               initial={{ x:  "-100%"}}
+               animate={{ x: showMenu ? "0" : "-100%"}}
+               exit={{ x: showMenu ? "30%" : "0"}}
                transition={{ duration: 0.5 }}
+               style={{position:"absolute", width:"30%"}}
          >
                <Menu></Menu>
             </motion.div>
-            )}
-         </AnimatePresence>
-            
-         
-         <AnimatePresence mode='wait'>
-         {data != undefined && !showMenu && (
+         {data != undefined && (
             <motion.div
-               initial={{ x:  "0"}}
-               animate={{ x: "0" }}
-               exit={{ x: "-100%" }}
-               transition={{ duration: 0.5 }}
-         >
-            <Content data={data}></Content>
-         </motion.div>
+            initial={{ x:  "0"}}
+            animate={{ x: showMenu ? "30%" : "0"}}
+            exit={{ x: showMenu ? "30%" : "0"}}
+            transition={{ duration: 0.5 }}
+            style={{position:"absolute", width:"100%"}}
+            >
+               <Content data={data}></Content>
+            </motion.div>
          )}
-         </AnimatePresence>
-         
       </div>
-      
    );
 }
 
