@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import './Menu.scss';
 
@@ -11,9 +11,16 @@ const Menu = (item) => {
 
 	
 
+	// const _setSelectedPage = useCallback((page) => {
+	// 	item.setSelectedPage(page);
+	// }, [item.setSelectedPage]);
 
+	const _setSelectedPage = useCallback((page) => {
+		item.setSelectedPage(page);
+		item.setShowMenu(false);
+		
+	}, [item.setSelectedPage, item.selectedPage]);
 
-	console.log(windowSize);
 
 	return(
 		<div
@@ -21,26 +28,26 @@ const Menu = (item) => {
 			style={{ height: (windowSize.current[1]) -60 + 'px' }}
 		>
 			<div className='items'>
-				<button className='item'>
+				<button className='item' onClick={() => {_setSelectedPage("Schedule")}}>
 					<div className='icon'><span className="the_icon"><CalendarWeek/></span></div>
 					<div className='text'>Schedule</div>
 				</button>
 			</div>
 			<div className='items'>
-				<button className='item'>
+				<button className='item' onClick={() => {_setSelectedPage("NewsFlash")}}>
 					<div className='icon'><span className="the_icon"><MegaphoneFill/></span></div>
 					<div className='text'>News Flash</div>
 				</button>
 			</div>
 			<div className='items'>
-				<button className='item'>
+				<button className='item' onClick={() => {_setSelectedPage("Schedule")}}>
 					<div className='icon'><span className="the_icon"><BuildingsFill/></span></div>
 					<div className='text'>Hotel Information</div>
 				</button>
 			</div>
 
 			<div className='items'>
-				<button className='item'>
+				<button className='item' onClick={() => {_setSelectedPage("Schedule")}}>
 					<div className='icon'><span className="the_icon"><CartFill/></span></div>
 					<div className='text'>Shoping</div>
 				</button>

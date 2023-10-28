@@ -12,7 +12,13 @@ function App() {
 
    const [showMenu, setShowMenu] = useState(false);
 
+   const [selectedPage, setSelectedPage] = useState("General");
+
    const windowSize = useRef([window.innerWidth, window.innerHeight]);
+
+
+
+   
 
 	useEffect(() => {
       if(data === undefined){
@@ -30,7 +36,7 @@ function App() {
  }, [data]);
 
    return (
-      <div style={{"overflow-x": "hidden"}}>    
+      <div style={{"overflowX": "hidden"}}>    
          {data != undefined ? 
          <Header data={data.data.general_data} setShowMenu={setShowMenu} showMenu={showMenu}></Header>
          : null}
@@ -41,7 +47,7 @@ function App() {
                transition={{ duration: 0.4 }}
                style={{position:"fixed", width:(windowSize.current[0] >= 767 ? "30%" : "80%"), top: "60px"}}
          >
-               <Menu></Menu>
+               <Menu setSelectedPage={setSelectedPage} selectedPage={selectedPage} setShowMenu={setShowMenu}></Menu>
             </motion.div>
          {data != undefined && (
             <motion.div
@@ -49,9 +55,15 @@ function App() {
             animate={{ x: showMenu ? (windowSize.current[0] >= 767 ? "30%" : "80%") : "0"}}
             exit={{ x: showMenu ? (windowSize.current[0] >= 767 ? "30%" : "80%") : "0"}}
             transition={{ duration: 0.4 }}
-            style={{position:"absolute", width:"100%", top: "60px"}}
+            style={{ width:"100%", marginTop: "60px"}}
             >
-               <Content data={data}></Content>
+               {showMenu ? 
+                  <div className='hiding_div'
+                  style={{ height: (windowSize.current[1]) -60 + 'px' }}
+                  ></div>
+               :null}
+
+               <Content data={data} setSelectedPage={setSelectedPage} selectedPage={selectedPage}></Content>
             </motion.div>
          )}
       </div>

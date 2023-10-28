@@ -27,3 +27,15 @@
         }
     }
 }
+
+@media (max-width: 767px) and (orientation: portrait) {
+    .Menu{
+        .items{
+            .item{
+                 .text {
+                    font-size: 26px;
+                 }
+            }
+        }
+    }
+}

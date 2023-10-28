@@ -1,0 +1,51 @@
+.NewsFlash {
+    .general_title{
+        padding: 10px 10px 10px 20px;
+        font-size: 26px;
+        width: 100%;
+        float: left;
+        width: 100%;
+        background: #90f5ff;
+        .general_title_text{
+            float: left;
+        }
+    }
+}
+
+.news_flas_list{
+    padding: 0px 0px 0px 0px;
+    float: left;
+    width: 100%;
+
+}
+
+.time{
+    font-size: 14px;
+    float: left;
+    width: 100%;
+}
+
+.headlines{
+font-size: 20px;
+font-weight: bold;
+}
+
+.datetime{
+    font-size: 14px;
+    float: left;
+    margin: 2px 0px 0px 4px;
+}
+
+
+
+.description{
+font-size: 14px;
+}
+
+.news_flas_item{
+    padding: 20px;
+    .icon{
+        font-size: 14px;
+        float: left;
+    }
+}

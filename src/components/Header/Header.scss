@@ -1,5 +1,8 @@
 .header {
     background-color: #25403f;
+    position: fixed;
+    width: 100%;
+    z-index: 999999;
     .header_box{
         padding: 0px;
         padding-right: 0px;

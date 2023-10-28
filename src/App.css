@@ -1,6 +1,13 @@
 .App {
   text-align: center;
 }
+.hiding_div{
+  width: 100%;
+  background-color: #000000bf;
+  position: absolute;
+  z-index: 99999999;
+  backdrop-filter: blur(3px);
+}
 
 .App-logo {
   height: 40vmin;

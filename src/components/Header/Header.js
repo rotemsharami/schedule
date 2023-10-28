@@ -7,7 +7,6 @@ const Header = (info) => {
 const [data, setData] = useState(getData());
 
 const menuToggle = useCallback(() => {
-	console.log(info.showMenu);
 	info.setShowMenu(info.showMenu ? false : true);
 	
 }, [info.setShowMenu, info.showMenu]);

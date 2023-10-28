@@ -10,12 +10,9 @@ import DivCarusel from '../DivCarusel/DivCarusel';
 
 const FullActivity = (obj) => {
 	const [item, setItem] = useState(obj.data.data.activities.filter(item=>item.id == obj.fullActivityId)[0]);
-
 	const windowSize = useRef([window.innerWidth, window.innerHeight]);
 	const [initialD, setInitialD] = useState(((windowSize.current[1])*2) + 'px');
 	const [exitD, setExitD] = useState("-"+windowSize.current[1] + 'px');
-
-	
 
 	const getLatLonObject = (string) => {
 		let res = {
@@ -24,11 +21,6 @@ const FullActivity = (obj) => {
 		}
 		return res;
 	}
-	
-	
-	//console.log(obj.data.data.activities);
-
-    //let item = ;
 
 	let activities = [];
 	Object.keys(obj.timeLine).forEach(dayKey => {
@@ -40,19 +32,11 @@ const FullActivity = (obj) => {
 	});
 
 	let sorted = activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
-
-	const previewActivity = () => {
-	
-	}
-
 	const items = ["http://schedule.rotem/sites/default/files/2023-10/FB_IMG_1643905200420_0.jpg", "http://schedule.rotem/sites/default/files/2023-10/319034001_481974017373916_8865815498800768161_n_0.jpg"];
-
-
 
 	const _zoomInToActivity = useCallback(() => {
 		obj.displayChange(false);
 	  }, [obj.displayChange]);
-
 
 	  const nextActivity = useCallback(() => {
 

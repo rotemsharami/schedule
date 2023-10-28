@@ -6,35 +6,23 @@ import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity, FilterCircleFill } fr
 import ActivityTeaser from '../ActivityTeaser/ActivityTeaser';
 import FullActivity from '../FullActivity/FullActivity';
 import { BsFillAlarmFill} from "react-icons/bs";
-
-
-
 import { motion, AnimatePresence } from "framer-motion";
 import axios from 'axios';
 import Header from '../Header/Header';
 
 const Schedule = (item) => {
-
-    
-
     const [data, setData] = useState();
     const [availableDays, setAvailableDays] = useState([]);
     const [timeLine, setTimeLine] = useState({});
     const [availableTypes, setAvailableTypes] = useState([]);
     const [selectedDays, setSelectedDays] = useState([]);
     const [selectedTypes, setSelectedTypes] = useState([]);
-
     const [showFilters, setShowFilters] = useState(false);
-
     const [zoomInToActivity, setZoomInToActivity] = useState(false);
     const [fullActivityId, setFullActivityId] = useState("1");
 
-
 	const windowSize = useRef([window.innerWidth, window.innerHeight]);
 	
-
-    
-
     let getAvailableDays = async () => {
         let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
         let _days = {};
@@ -93,25 +81,27 @@ const Schedule = (item) => {
     let getTimeLine = async () => {
         if(data.data.activities != undefined){
             let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
-            let time_line = {};
-
             
-
+            console.log(sorted);
+            
+            let time_line = {};
             sorted.forEach(element => {
                 let day = moment(element.start, 'YYYY-MM-DD HH:mm').format("DD/MM");
                 if((selectedDays.includes(day) || selectedDays.length === 0)){
                     if(time_line[day] === undefined)
-                    time_line[day] = {};
+                        time_line[day] = {};
                     let day_activities = sorted.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
+                    console.log(day_activities);
+                    
                     let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
-                    sorted_day_activities.forEach(activity => {
+                    day_activities.forEach(activity => {
                         if((selectedTypes.includes(activity.type) || selectedTypes.length === 0)){
-                            if(time_line[day][activity.type] === undefined)
-                                time_line[day][activity.type] = {};
-                            if(time_line[day][activity.type][activity.id] === undefined)
-                                time_line[day][activity.type][activity.id] = {};
+                            if(time_line[day]["at-"+activity.type] === undefined)
+                                time_line[day]["at-"+activity.type] = {};
+                            if(time_line[day]["at-"+activity.type][activity.id] === undefined)
+                                time_line[day]["at-"+activity.type][activity.id] = {};
                             activity.range = (moment(activity.end, 'YYYY-MM-DD HH:mm').unix() - moment(activity.start, 'YYYY-MM-DD HH:mm').unix()) / 3600;
-                            time_line[day][activity.type][activity.id] = activity;
+                            time_line[day]["at-"+activity.type][activity.id] = activity;
                         }
                     });
                 }
@@ -119,8 +109,6 @@ const Schedule = (item) => {
             return time_line;
         }
     }
-
-    
 
     let dataToTimeLine = () => {
         let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
@@ -133,14 +121,12 @@ const Schedule = (item) => {
                 let day_activities = sorted.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
                 let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
                 sorted_day_activities.forEach(activity => {
-                    //if((selectedTypes.includes(activity.type) || selectedTypes.length === 0)){
-                        if(time_line[day][activity.type] === undefined)
-                            time_line[day][activity.type] = {};
-                        if(time_line[day][activity.type][activity.id] === undefined)
-                            time_line[day][activity.type][activity.id] = {};
-                        activity.range = (moment(activity.end, 'YYYY-MM-DD HH:mm').unix() - moment(activity.start, 'YYYY-MM-DD HH:mm').unix()) / 3600;
-                        time_line[day][activity.type][activity.id] = activity;
-                    //}
+                    if(time_line[day][activity.type] === undefined)
+                        time_line[day][activity.type] = {};
+                    if(time_line[day][activity.type][activity.id] === undefined)
+                        time_line[day][activity.type][activity.id] = {};
+                    activity.range = (moment(activity.end, 'YYYY-MM-DD HH:mm').unix() - moment(activity.start, 'YYYY-MM-DD HH:mm').unix()) / 3600;
+                    time_line[day][activity.type][activity.id] = activity;
                 });
             }
         });
@@ -181,39 +167,14 @@ const Schedule = (item) => {
         });
     }
 
-
-
 	useEffect(() => {
-
-
-        // if(item.data.data != undefined){
-        //     setData({data:item.data.data});
-        // }
-
-
-
         if(data === undefined){
-            
-
-            // axios.get('https://schedule.latinet.co.il/en/activities')
-            // .then(response => {
-            //     setData({data:response.data.data});
-                
-            // })
-            // .catch(error => {
-            //     console.error('Error fetching data:', error);
-            // });
-
             setData({data:item.data.data});
-            // console.log(item);
-
         }
-
         if(data != undefined){
             start();
         }
 	}, [data]);
-
 
 	useEffect(() => {
         if(data != undefined){
@@ -227,7 +188,6 @@ const Schedule = (item) => {
         }
 	}, [selectedDays]);
 
-
 	useEffect(() => {
         if(data != undefined){
             getTimeLine().then(function(_timeLine) {
@@ -235,11 +195,6 @@ const Schedule = (item) => {
             });
         }
 	}, [selectedTypes]);
-
-    
-
-
-
 
     return(
         <div className="schedule">
@@ -252,7 +207,6 @@ const Schedule = (item) => {
                 </div>
             </div>
             {/* <div>{ JSON.stringify(selectedDays, null, 2) }</div> */}
-
             {zoomInToActivity === true ?
                     <FullActivity timeLine={timeLine} fullActivityId={fullActivityId} data={data} displayChange={setZoomInToActivity} setFullActivityId={setFullActivityId}></FullActivity>
                 : null }
@@ -281,7 +235,6 @@ const Schedule = (item) => {
                         </div>
                         : null }
                     </div>
-            
                     <div className="types">
                         <div className="types_box">
                             {availableTypes.map((type_i) =>
@@ -298,7 +251,6 @@ const Schedule = (item) => {
                     </div>
                 </div>
                 : null}
-            
             { timeLine != undefined ?
                 <span>
                     {Object.keys(timeLine).map((day_i) =>
@@ -321,7 +273,6 @@ const Schedule = (item) => {
                     )}
                 </span>
             : null }
-            
         </div>
     );
 };
