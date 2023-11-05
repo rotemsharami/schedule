@@ -33,6 +33,35 @@
         }
         width: 100%;
     }
+
+    .activity_row{
+    width: 100%;
+    background-color: #acf3ff;
+    border-top: 2px solid #72ced5;
+    display: flex;
+    flex-direction: row;
+
+
+        .time_box{
+            width: 70px;
+            text-align: center;
+            color: #30686c;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            .time_box_inner{
+                align-self: center;
+                line-height: 15px;
+            }
+        }
+        .activities_box_list{
+            width: calc(100% - 70px);
+            display: flex;
+            flex-direction: column;
+        }
+    }
+    
     .day_title{
         background: #2c3f3e;
         color: #FFF;

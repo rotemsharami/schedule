@@ -82,7 +82,7 @@ const Schedule = (item) => {
         if(data.data.activities != undefined){
             let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
             
-            console.log(sorted);
+            
             
             let time_line = {};
             sorted.forEach(element => {
@@ -91,21 +91,26 @@ const Schedule = (item) => {
                     if(time_line[day] === undefined)
                         time_line[day] = {};
                     let day_activities = sorted.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
-                    console.log(day_activities);
                     
                     let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
                     day_activities.forEach(activity => {
                         if((selectedTypes.includes(activity.type) || selectedTypes.length === 0)){
-                            if(time_line[day]["at-"+activity.type] === undefined)
-                                time_line[day]["at-"+activity.type] = {};
-                            if(time_line[day]["at-"+activity.type][activity.id] === undefined)
-                                time_line[day]["at-"+activity.type][activity.id] = {};
+
+                            if(time_line[day][activity.time_range.from+"-"+activity.time_range.to] === undefined)
+                                time_line[day][activity.time_range.from+"-"+activity.time_range.to] = {}
+                            if(time_line[day][activity.time_range.from+"-"+activity.time_range.to]["at-"+activity.type] === undefined)
+                                time_line[day][activity.time_range.from+"-"+activity.time_range.to]["at-"+activity.type] = {};
+                            if(time_line[day][activity.time_range.from+"-"+activity.time_range.to]["at-"+activity.type][activity.id] === undefined)
+                                time_line[day][activity.time_range.from+"-"+activity.time_range.to]["at-"+activity.type][activity.id] = {};
                             activity.range = (moment(activity.end, 'YYYY-MM-DD HH:mm').unix() - moment(activity.start, 'YYYY-MM-DD HH:mm').unix()) / 3600;
-                            time_line[day]["at-"+activity.type][activity.id] = activity;
+                            time_line[day][activity.time_range.from+"-"+activity.time_range.to]["at-"+activity.type][activity.id] = activity;
                         }
                     });
                 }
             });
+
+            console.log(time_line);
+
             return time_line;
         }
     }
@@ -131,6 +136,10 @@ const Schedule = (item) => {
             }
         });
         return time_line;
+    }
+
+    const setStartEndTime = (string, index) =>{
+        return string.split("-")[index];
     }
 
     function start() {
@@ -258,15 +267,36 @@ const Schedule = (item) => {
                             { Object.keys(timeLine[day_i]).length > 0 ?
                                 <span>
                                 <div className='day_title'>{day_i}</div>
-                                {Object.keys(timeLine[day_i]).map((type_i) =>
-                                    <div className="activities_box" key={type_i}>
-                                        {Object.keys(timeLine[day_i][type_i]).map((activity_i) =>
-                                            <span key={activity_i}>
-                                                <ActivityTeaser key={activity_i} item={timeLine[day_i][type_i][activity_i]} data={data} displayChange={setZoomInToActivity} idActivity={setFullActivityId}></ActivityTeaser>
-                                            </span>
-                                        )}
-                                    </div>
-                                )}
+
+                                    {Object.keys(timeLine[day_i]).map((time_i) =>
+                                        <div className='activity_row'>
+                                            <div className='time_box'>
+                                                <div className='time_box_inner'>
+                                                    <div className='time_item'>{setStartEndTime(time_i,0)}</div>
+                                                        <div className='icon'>
+                                                            <ArrowDown/>
+                                                        </div>
+                                                        <div className='time_item'>{setStartEndTime(time_i,1)}</div>
+                                                    </div>  
+                                                </div>
+                                            <div className='activities_box_list'>
+                                            {timeLine[day_i][time_i] != undefined ? 
+                                                <span>
+                                                    {Object.keys(timeLine[day_i][time_i]).map((type_i) =>
+                                                        <div className="activities_box" key={type_i}>
+                                                            {Object.keys(timeLine[day_i][time_i][type_i]).map((activity_i) =>
+                                                                <span key={activity_i}>
+                                                                    <ActivityTeaser key={activity_i} item={timeLine[day_i][time_i][type_i][activity_i]} data={data} displayChange={setZoomInToActivity} idActivity={setFullActivityId} activityAmounts={timeLine[day_i][time_i]}></ActivityTeaser>
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </span>
+                                            : null}
+                                        </div>
+                                        </div>
+                                    )}
+
                                 </span>
                             : null }
                         </span>

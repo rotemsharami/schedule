@@ -15,23 +15,56 @@ const ActivityTeaser = (item) => {
 		item.idActivity(item.item.id);
 	  }, [item.displayChange, item.idActivity]);
 
+	const getWidth = ()=> {
+		let amount = 0;
+		Object.keys(item.activityAmounts).forEach(typeI => {
+			Object.keys(item.activityAmounts[typeI]).forEach(activityI => {
+				amount++;
+			});
+		});
+		return 100 / 1;
+	}
+
+
+	const getBorderBottom = ()=> {
+		let index = -1;
+		let result = false;
+		let list = [];
+		Object.keys(item.activityAmounts).forEach(typeI => {
+			Object.keys(item.activityAmounts[typeI]).forEach(activityI => {
+				list.push(activityI);
+			});
+		});
+		list.forEach((element, i) => {
+			
+			if(element == item.item.id){
+				index = i;
+			}
+				
+		});
+		
+		if(((list.length-1) != 0) && (index < (list.length-1))){
+			result = true;
+		}
+		let borderSize = result ? "2" : "0";
+
+		console.log("ddd");
+
+		return borderSize;
+	}
 
 	
 	return(
-		<button className="ActivityTeaser" onClick={()=>_zoomInToActivity()}>
+		<button
+			className="ActivityTeaser" onClick={()=>_zoomInToActivity()}
+			style={{
+				width: getWidth() + '%',
+				borderBottom: getBorderBottom()+"px solid #72ced5",
+			}}
+			>
 			
 			<div className='activity'>
-				<div className='time info_item'>
-					<div className='time_item'>
-						{moment(item.item.start, "YYYY-MM-dd HH:mm").format("HH:mm")}
-					</div>
-					<div className='icon'>
-						<ArrowDown/>
-					</div>
-					<div className='time_item'>
-						{moment(item.item.end, "YYYY-MM-dd HH:mm").format("HH:mm")}
-					</div>
-				</div>
+				
 				<div className='image_box info_item'>
 					<div
 						className='image_background'

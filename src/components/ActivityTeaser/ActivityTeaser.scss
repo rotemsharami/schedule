@@ -1,26 +1,22 @@
 .ActivityTeaser{
-    background-color: #acf3ff;
     float: left;
-    width: 100%;
     margin-top: 0px;
     padding: 10px 10px 10px 10px;
     border: 0px;
-    border-top: 2px solid #25403f;
+    background: none;
+    border-left: 2px solid #72ced5;
+    color: #30686c;
+
+    .activity{
+        display: flex;
+        flex-direction: row;
+    }
+    
     .info_item{
-        float: left;
+        display: flex;
+        flex-direction: column;
     }
-    .time{
-        text-align: center;
-        width: 70px;
-        .time_item{
-            line-height: 20px;
-            font-weight: bold;
-            font-size: 15px;
-        }
-        .icon{
-            line-height: 13px;
-        }
-    }
+
     .type{
         display: block;
         .type_box{
@@ -50,7 +46,14 @@
         .title{
             font-weight: bold;
             font-size: 20px;
+            line-height: 20px;
         }
+
+        .title::after{
+            content: "\a";
+            white-space: pre;
+        }
+
         .description{
             font-size: 15px;
         }
