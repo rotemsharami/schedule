@@ -24,9 +24,11 @@ const FullActivity = (obj) => {
 
 	let activities = [];
 	Object.keys(obj.timeLine).forEach(dayKey => {
-		Object.keys(obj.timeLine[dayKey]).forEach(typeKey => {
-			Object.keys(obj.timeLine[dayKey][typeKey]).forEach(activityKey => {
-				activities.push(obj.timeLine[dayKey][typeKey][activityKey]);
+		Object.keys(obj.timeLine[dayKey]).forEach(timeKey => {
+			Object.keys(obj.timeLine[dayKey][timeKey]).forEach(typeKey => {
+				Object.keys(obj.timeLine[dayKey][timeKey][typeKey]).forEach(activityKey => {
+					activities.push(obj.timeLine[dayKey][timeKey][typeKey][activityKey]);
+				});
 			});
 		});
 	});

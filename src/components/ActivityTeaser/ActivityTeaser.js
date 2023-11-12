@@ -48,7 +48,6 @@ const ActivityTeaser = (item) => {
 		}
 		let borderSize = result ? "2" : "0";
 
-		console.log("ddd");
 
 		return borderSize;
 	}

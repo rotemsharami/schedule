@@ -35,11 +35,11 @@
     }
 
     .activity_row{
-    width: 100%;
-    background-color: #acf3ff;
-    border-top: 2px solid #72ced5;
-    display: flex;
-    flex-direction: row;
+        width: 100%;
+        background-color: #acf3ff;
+        border-top: 2px solid #72ced5;
+        display: flex;
+        flex-direction: row;
 
 
         .time_box{
@@ -75,7 +75,8 @@
     }
 
     .section_1{
-        float: left;
+        display: flex;
+        flex-direction: row;
         background-size: cover;
         background-position: 0px -432px;
         padding: 10px;
@@ -84,6 +85,44 @@
         padding-left: 0px;
         margin-right: 0px;
         margin-left: 0px;
+        .filter_section{
+            display: flex;
+            width: calc(100% / 3);
+            padding: 10px;
+            .filter_title{
+                display: flex;
+            }
+            .filter_list{
+                display: flex;
+                flex-direction: column;
+                button{
+                    display: flex;
+                    border: 0px;
+                    background: none;
+                    .checkbox{
+                        border: 2px solid #00a0aa;
+                        border-radius: 43px;
+                        width: 24px;
+                        height: 24px;
+                    }
+                    .filter_item_title{
+                        padding: 0px 0px 0px 5px;
+                        color: #006c72;
+                    }
+                    .checkebox_icon{
+                        position: relative;
+                        top: -12px;
+                        font-size: 24px;
+                        left: -2px;
+                        color: #00a0aa;
+                    }
+                }
+                button.active{
+                    
+                }
+            }
+
+        }
     }
 
     
@@ -97,83 +136,13 @@
             margin: 0 auto;
             display: table;
 
-            button{
-                border: 0px;
-                padding: 0px 10px 1px 10px;
-                background: #486564;
-                color: #d8ffff;
-                font-weight: bold;
-                margin-right: 0px;
-                min-width: 72px;
-            }
-            button.active{
-                background: #2c3f3e;
-                color: #FFF;
-            }
+
         }
 
     }
-    .days{
-        padding: 10px;
-        width: 100%;
-        .types_box,
-        .days_box{
-            margin: 0 auto;
-            display: table;
-            button{
-                border: 0px;
-                border-radius: 100px;
-                padding: 17px 0px 17px 0px;
-                background: #9fccd4;
-                color: #2c3f3e;
-                font-weight: bold;
-                font-size: 17px;
-                margin-right: 10px;
-                min-width: 66px;
-                border: 3px solid #ffffff;
-            }
-            button.active{
 
-                background: #2c3f3e;
-                color: #d8ffff;
+    
 
-            }
-        }
-    }
-    .types{
-        padding: 10px;
-        
-        width: 100%;
-
-        .types_box{
-            margin: 0 auto;
-            display: table;
-            button{
-                border-radius: 10px;
-                padding: 0px 10px 1px 10px;
-                border: 3px solid #ffffff;
-                color: #2c3f3e;
-                font-weight: bold;
-                margin-right: 10px;
-                min-width: 110px;
-                background: none;
-                height: 62px;
-                background: #9fccd4;
-            }
-            button.active{
-                background: #2c3f3e;
-                color: #FFF;
-            }
-
-        }
-    }
-    .activities{
-        
-        .activities_box{
-
-            
-        }
-    }
 
 
 }
