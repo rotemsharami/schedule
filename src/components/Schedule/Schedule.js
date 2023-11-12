@@ -39,7 +39,6 @@ const Schedule = (item) => {
         return Object.keys(_days);
     }
 
-
     let getAvailableTypes = async () => {
         let _timeLine = dataToTimeLine();
         if(selectedDays != undefined){
@@ -56,7 +55,6 @@ const Schedule = (item) => {
         }
     }
 
-
     let getAvailableDanceTypes = async () => {
         let _timeLine = dataToTimeLine();
         if(selectedDays != undefined){
@@ -64,14 +62,16 @@ const Schedule = (item) => {
             Object.keys(_timeLine).forEach(day_i => {
                 if(selectedDays.includes(day_i) || selectedDays.length == 0){
                     Object.keys(_timeLine[day_i]).forEach(type_i => {
-                        Object.keys(_timeLine[day_i][type_i]).forEach(activity_i => {
-                            if(_timeLine[day_i][type_i][activity_i].dance_types != undefined){
-                                Object.keys(_timeLine[day_i][type_i][activity_i].dance_types).forEach(item => {
-                                    if(!dance_types.includes(_timeLine[day_i][type_i][activity_i].dance_types[item].tid))
-                                        dance_types.push(_timeLine[day_i][type_i][activity_i].dance_types[item].tid);
-                                });
-                            }
-                        });
+                        if(selectedTypes.includes(type_i) || selectedTypes.length == 0){
+                            Object.keys(_timeLine[day_i][type_i]).forEach(activity_i => {
+                                if(_timeLine[day_i][type_i][activity_i].dance_types != undefined){
+                                    Object.keys(_timeLine[day_i][type_i][activity_i].dance_types).forEach(item => {
+                                        if(!dance_types.includes(_timeLine[day_i][type_i][activity_i].dance_types[item].tid))
+                                            dance_types.push(_timeLine[day_i][type_i][activity_i].dance_types[item].tid);
+                                    });
+                                }
+                            });
+                        }
                     });
                 }
             });
@@ -79,16 +79,14 @@ const Schedule = (item) => {
         }
     }
 
-
     let getSelectedDays = async (index) => {
         let old_state_of_selectedDays = selectedDays;
         if (old_state_of_selectedDays.includes(index)){
             const preState = selectedDays;
             old_state_of_selectedDays = old_state_of_selectedDays.filter(a => a !== index);
         }
-        else{
+        else
             old_state_of_selectedDays = [...old_state_of_selectedDays, index];
-        }
         return old_state_of_selectedDays;
     }
 
@@ -98,25 +96,20 @@ const Schedule = (item) => {
             const preState = selectedTypes;
             old_state_of_selectedTypes = old_state_of_selectedTypes.filter(a => a !== index);
         }
-        else{
+        else
             old_state_of_selectedTypes = [...old_state_of_selectedTypes, index];
-        }
+        
         return old_state_of_selectedTypes;
     }
 
     let getSelectedDanceTypes = async(index) => {
-        
         let old_state_of_selectedDanceTypes = selectedDanceTypes;
-        if (old_state_of_selectedDanceTypes.includes(index)){
+        if (old_state_of_selectedDanceTypes.includes(index))
             old_state_of_selectedDanceTypes = old_state_of_selectedDanceTypes.filter(a => a !== index);
-        }
-        else{
+        else
             old_state_of_selectedDanceTypes = [...old_state_of_selectedDanceTypes, index];
-        }
-        
         return old_state_of_selectedDanceTypes;
     }
-
 
     let getTimeLine = async () => {
         if(data.data.activities != undefined){
@@ -128,39 +121,25 @@ const Schedule = (item) => {
                     if(time_line[day] === undefined)
                         time_line[day] = {};
                     let day_activities = sorted.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
-                    
                     let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
                     day_activities.forEach(activity => {
                         let valid = false;
-                        if((selectedTypes.includes(activity.type) || selectedTypes.length === 0)){
+                        if((selectedTypes.includes(activity.type) || selectedTypes.length === 0))
                             valid = true;
-                        }
-                        if(selectedDanceTypes.length === 0){
+                        if(selectedDanceTypes.length === 0)
                             valid = true;
-                        }else{
+                        else{
                             valid = false;
-                            if(activity.dance_types == undefined){
+                            if(activity.dance_types == undefined)
                                 valid = false;
-                            }else{
-                                
+                            else{
                                 Object.keys(activity.dance_types).forEach(element => {
-                                    //console.log(activity.dance_types[element].tid);
-                                    console.log(selectedDanceTypes.includes(activity.dance_types[element].tid));
-                                    if(selectedDanceTypes.includes(activity.dance_types[element].tid) && valid == false){
-                                        
+                                    if(selectedDanceTypes.includes(activity.dance_types[element].tid) && valid == false)
                                         valid = true;
-                                    }
                                 });
                             }
                         }
-                        
-
                         if(valid){
-
-                            
-
-                        
-
                             if(time_line[day][activity.time_range.from+"-"+activity.time_range.to] === undefined)
                                 time_line[day][activity.time_range.from+"-"+activity.time_range.to] = {}
                             if(time_line[day][activity.time_range.from+"-"+activity.time_range.to]["at-"+activity.type] === undefined)
@@ -169,14 +148,10 @@ const Schedule = (item) => {
                                 time_line[day][activity.time_range.from+"-"+activity.time_range.to]["at-"+activity.type][activity.id] = {};
                             activity.range = (moment(activity.end, 'YYYY-MM-DD HH:mm').unix() - moment(activity.start, 'YYYY-MM-DD HH:mm').unix()) / 3600;
                             time_line[day][activity.time_range.from+"-"+activity.time_range.to]["at-"+activity.type][activity.id] = activity;
-                            
                         }
                     });
                 }
             });
-
-            
-
             return time_line;
         }
     }
@@ -230,6 +205,9 @@ const Schedule = (item) => {
                 setTimeLine(pre=>_timeLine);
                 getAvailableTypes().then(function(_availableTypes) {
                     setAvailableTypes(pre=>_availableTypes);
+                    getAvailableDanceTypes().then(function(_availableDanceTypes){
+                        setAvailableDanceTypes(pre => _availableDanceTypes);
+                    });
                 });
             });
         });
@@ -238,8 +216,8 @@ const Schedule = (item) => {
     function changeTypes(type) {
         getSelectedTypes(type).then(function(_selectedTypes) {
             setSelectedTypes(pre=>_selectedTypes);
-            getSelectedDanceTypes(type).then(function(_selectedDanceTypes) {
-                setSelectedDanceTypes(pre=>_selectedDanceTypes);
+            getAvailableDanceTypes().then(function(_availableDanceTypes){
+                setAvailableDanceTypes(pre => _availableDanceTypes);
                 getTimeLine().then(function(_timeLine) {
                     setTimeLine(pre=>_timeLine);
                 });
@@ -277,29 +255,13 @@ const Schedule = (item) => {
                 setTimeLine(pre=>_timeLine);
                 getAvailableTypes().then(function(_availableTypes) {
                     setAvailableTypes(pre=>_availableTypes);
-
+                    getAvailableDanceTypes().then(function(_availableDanceTypes){
+                        setAvailableDanceTypes(pre => _availableDanceTypes);
+                    });
                 });
             });
         }
-	}, [selectedDays]);
-
-	useEffect(() => {
-        if(data != undefined){
-            getTimeLine().then(function(_timeLine) {
-                setTimeLine(pre=>_timeLine);
-            });
-        }
-	}, [selectedTypes]);
-
-
-	useEffect(() => {
-        if(data != undefined){
-            getTimeLine().then(function(_timeLine) {
-                setTimeLine(pre=>_timeLine);
-            });
-        }
-	}, [selectedDanceTypes]);
-
+	}, [selectedDays,selectedTypes,selectedDanceTypes]);
 
     return(
         <div className="schedule">
@@ -323,64 +285,59 @@ const Schedule = (item) => {
                     // backgroundImage: `url(`+data.data.general_data.image+`)` 
                 }}
                 >
-                
-
-                    <div className="days filter_section">
-                        {availableDays != undefined ?
-                        <div className="days_box">
-                            <div className="filter_title"><span className='filter_title_icon'><BsFillAlarmFill/></span><span className='filter_title_text'>Days</span></div>
-                            <div className='filter_list'>
-                                {availableDays.map((day_i) =>
-                                    <button
-                                        className={selectedDays.includes(day_i) ? 'active' : ''}
-                                        onClick={() => {changeDays(day_i)}}
-                                        key={day_i}
+                <div className="days filter_section">
+                    {availableDays != undefined ?
+                    <div className="days_box">
+                        <div className="filter_title"><span className='filter_title_icon'><BsFillAlarmFill/></span><span className='filter_title_text'>Days</span></div>
+                        <div className='filter_list'>
+                            {availableDays.map((day_i) =>
+                                <button
+                                    className={selectedDays.includes(day_i) ? 'active' : ''}
+                                    onClick={() => {changeDays(day_i)}}
+                                    key={day_i}
+                                >
+                                    <div className='checkbox'>{selectedDays.includes(day_i) ? <span className='checkebox_icon'><Check/></span>: null}</div>
+                                    <div className='filter_item_title'>{day_i}</div>
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                    : null }
+                </div>
+                <div className="types filter_section">
+                    <div className="types_box">
+                    <div className="filter_title"><span className='filter_title_icon'><BsFillAlarmFill/></span><span className='filter_title_text'>Activities</span></div>
+                        <div className='filter_list'>
+                            {availableTypes.map((type_i) =>
+                                <button
+                                    className={selectedTypes.includes(type_i) ? 'active' : ''}
+                                    onClick={() => { changeTypes(type_i)}}
+                                    key={type_i}
                                     >
-                                        <div className='checkbox'>{selectedDays.includes(day_i) ? <span className='checkebox_icon'><Check/></span>: null}</div>
-                                        <div className='filter_item_title'>{day_i}</div>
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                        : null }
-                    </div>
-                    <div className="types filter_section">
-                        <div className="types_box">
-                        <div className="filter_title"><span className='filter_title_icon'><BsFillAlarmFill/></span><span className='filter_title_text'>Activities</span></div>
-                            <div className='filter_list'>
-                                {availableTypes.map((type_i) =>
-                                    <button
-                                        className={selectedTypes.includes(type_i) ? 'active' : ''}
-                                        onClick={() => { changeTypes(type_i)}}
-                                        key={type_i}
-                                        >
-                                        <div className='checkbox'>{selectedTypes.includes(type_i) ? <span className='checkebox_icon'><Check/></span>:null}</div>
-                                        <div className='filter_item_title'>{data.data.activity_type[type_i].title}</div>
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="dance_types filter_section">
-                        <div className="types_box">
-                        <div className="filter_title"><span className='filter_title_icon'><BsFillAlarmFill/></span><span className='filter_title_text'>Dance Types</span></div>
-                            <div className='filter_list'>
-                                {availableDanceTypes.map((type_i) =>
-                                    <button
-                                        onClick={() => { changeDanceTypes(type_i)}}
-                                        key={type_i}
-                                        >
-                                        <div className='checkbox'>{selectedDanceTypes.includes(type_i) ? <span className='checkebox_icon'><Check/></span>:null}</div>
-                                        <div className='filter_item_title'>{data.data.general_data.dance_floors[type_i].name}</div>
-                                    </button>
-                                )}
-                            </div>
+                                    <div className='checkbox'>{selectedTypes.includes(type_i) ? <span className='checkebox_icon'><Check/></span>:null}</div>
+                                    <div className='filter_item_title'>{data.data.activity_type[type_i].title}</div>
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
-                : null}
+                <div className="dance_types filter_section">
+                    <div className="types_box">
+                    <div className="filter_title"><span className='filter_title_icon'><BsFillAlarmFill/></span><span className='filter_title_text'>Dance Types</span></div>
+                        <div className='filter_list'>
+                            {availableDanceTypes.map((type_i) =>
+                                <button
+                                    onClick={() => { changeDanceTypes(type_i)}}
+                                    key={type_i}
+                                    >
+                                    <div className='checkbox'>{selectedDanceTypes.includes(type_i) ? <span className='checkebox_icon'><Check/></span>:null}</div>
+                                    <div className='filter_item_title'>{data.data.general_data.dance_floors[type_i].name}</div>
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div> : null}
             { timeLine != undefined ?
                 <span>
                     {Object.keys(timeLine).map((day_i) =>
@@ -388,7 +345,6 @@ const Schedule = (item) => {
                             { Object.keys(timeLine[day_i]).length > 0 ?
                                 <span>
                                 <div className='day_title'>{day_i}</div>
-
                                     {Object.keys(timeLine[day_i]).map((time_i) =>
                                         <div className='activity_row' key={time_i}>
                                             <div className='time_box'>
