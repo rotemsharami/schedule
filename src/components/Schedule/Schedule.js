@@ -201,36 +201,18 @@ const Schedule = (item) => {
     function changeDays(day) {
         getSelectedDays(day).then(function(_selectedDays) {
             setSelectedDays(pre=>_selectedDays);
-            getTimeLine().then(function(_timeLine) {
-                setTimeLine(pre=>_timeLine);
-                getAvailableTypes().then(function(_availableTypes) {
-                    setAvailableTypes(pre=>_availableTypes);
-                    getAvailableDanceTypes().then(function(_availableDanceTypes){
-                        setAvailableDanceTypes(pre => _availableDanceTypes);
-                    });
-                });
-            });
         });
     }
 
     function changeTypes(type) {
         getSelectedTypes(type).then(function(_selectedTypes) {
             setSelectedTypes(pre=>_selectedTypes);
-            getAvailableDanceTypes().then(function(_availableDanceTypes){
-                setAvailableDanceTypes(pre => _availableDanceTypes);
-                getTimeLine().then(function(_timeLine) {
-                    setTimeLine(pre=>_timeLine);
-                });
-            });
         });
     }
 
     function changeDanceTypes(type) {
         getSelectedDanceTypes(type).then(function(_selectedTypes) {
             setSelectedDanceTypes(pre=>_selectedTypes);
-            getTimeLine().then(function(_timeLine) {
-                setTimeLine(pre=>_timeLine);
-            });
         });
     }
 
@@ -373,7 +355,6 @@ const Schedule = (item) => {
                                         </div>
                                         </div>
                                     )}
-
                                 </span>
                             : null }
                         </span>
