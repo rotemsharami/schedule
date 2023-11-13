@@ -31,9 +31,8 @@ const Schedule = (item) => {
         sorted.forEach(element => {
             let day = moment(element.start, 'YYYY-MM-DD HH:mm').format("DD/MM");
             if(selectedDays.includes(day) || selectedDays.length === 0){
-                if(_days[day] === undefined){
+                if(_days[day] === undefined)
                     _days[day] = {};
-                }
             }
         });
         return Object.keys(_days);
@@ -98,7 +97,6 @@ const Schedule = (item) => {
         }
         else
             old_state_of_selectedTypes = [...old_state_of_selectedTypes, index];
-        
         return old_state_of_selectedTypes;
     }
 
@@ -123,23 +121,25 @@ const Schedule = (item) => {
                     let day_activities = sorted.filter((item) => day === moment(item.start, 'YYYY-MM-DD HH:mm').format("DD/MM"));
                     let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
                     day_activities.forEach(activity => {
-                        let valid = false;
+                        let validTypes = false;
+                        
                         if((selectedTypes.includes(activity.type) || selectedTypes.length === 0))
-                            valid = true;
+                            validTypes = true;
+                        let validDanceTypes = false;
                         if(selectedDanceTypes.length === 0)
-                            valid = true;
+                            validDanceTypes = true;
                         else{
-                            valid = false;
+                            validDanceTypes = false;
                             if(activity.dance_types == undefined)
-                                valid = false;
+                                validDanceTypes = false;
                             else{
                                 Object.keys(activity.dance_types).forEach(element => {
-                                    if(selectedDanceTypes.includes(activity.dance_types[element].tid) && valid == false)
-                                        valid = true;
+                                    if(selectedDanceTypes.includes(activity.dance_types[element].tid) && validDanceTypes == false)
+                                        validDanceTypes = true;
                                 });
                             }
                         }
-                        if(valid){
+                        if(validTypes && validDanceTypes){
                             if(time_line[day][activity.time_range.from+"-"+activity.time_range.to] === undefined)
                                 time_line[day][activity.time_range.from+"-"+activity.time_range.to] = {}
                             if(time_line[day][activity.time_range.from+"-"+activity.time_range.to]["at-"+activity.type] === undefined)
