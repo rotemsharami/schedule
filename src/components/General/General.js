@@ -4,7 +4,7 @@ import './General.scss';
 import moment from 'moment';
 
 const General = (item) => {
-	var momentObject = moment("2023-10-05 18:30", "YYYY-MM-DD HH:mm");
+	var momentObject = moment("2023-09-02 14:00", "YYYY-MM-DD HH:mm");
 	let now_activities = item.data.data.activities.filter((item) => {
 		return momentObject.isBetween(moment(item.start), moment(item.end)) || moment(item.start).isSame(momentObject);
 	});
@@ -83,7 +83,7 @@ const General = (item) => {
 		<div className="General">
 			<div className='now_activities'>
 
-				<div className='time_now'>{time.format('DD/MM/YYYY HH:mm')}</div>
+				<div className='time_now'>{momentObject.format('DD/MM/YYYY HH:mm')}   </div>
 
 				<div className='title'>Now:</div>
 

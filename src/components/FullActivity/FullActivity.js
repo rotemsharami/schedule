@@ -89,11 +89,14 @@ const FullActivity = (obj) => {
 	
 	return(
 		<div className="full_activity">
+									<AnimatePresence 
+            				mode='wait'
+            			>
 			<motion.div
-				initial={{ scale: 0.0 }}
-				animate={{scale: 1}}
-				exit={{ scale: 0.0 }}
-				transition={{ duration: 0.2 }}
+ initial={{ opacity: 0, scale: 0 }}
+ animate={{ opacity: 1, scale: 1 }}
+ exit={{ opacity: 0, scale: 0 }}
+				transition={{ duration: 0.4 }}
 				style={{ height: windowSize.current[1] + 'px' }}
 				>
 				<div className="full_activity_container">
@@ -163,7 +166,7 @@ const FullActivity = (obj) => {
 									</div>
 
 								<div className='one_button'>
-									<button onClick={()=>_zoomInToActivity()}><span className='icon'><XCircleFill/></span></button>
+									<button onClick={()=>obj.getShowFullActivity(false)}><span className='icon'><XCircleFill/></span></button>
 								</div>
 							</motion.div>
 						</AnimatePresence>
@@ -178,6 +181,7 @@ const FullActivity = (obj) => {
 					</div>
 				</div>
 			</motion.div>
+			</AnimatePresence>
 		</div>
 	);
 };

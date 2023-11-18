@@ -1,14 +1,10 @@
 import {React, useEffect, useState, useRef} from 'react';
 import './Schedule.scss';
-import {getData} from "../../tools/data";
 import moment from 'moment';
 import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity, FilterCircleFill, Check } from "react-bootstrap-icons";
 import ActivityTeaser from '../ActivityTeaser/ActivityTeaser';
 import FullActivity from '../FullActivity/FullActivity';
 import { BsFillAlarmFill} from "react-icons/bs";
-import { motion, AnimatePresence } from "framer-motion";
-import axios from 'axios';
-import Header from '../Header/Header';
 
 const Schedule = (item) => {
     const [data, setData] = useState();
@@ -256,9 +252,7 @@ const Schedule = (item) => {
                 </div>
             </div>
             {/* <div>{ JSON.stringify(selectedDays, null, 2) }</div> */}
-            {zoomInToActivity === true ?
-                    <FullActivity timeLine={timeLine} fullActivityId={fullActivityId} data={data} displayChange={setZoomInToActivity} setFullActivityId={setFullActivityId}></FullActivity>
-                : null }
+
 
             {data != undefined  && showFilters ?
             <div
@@ -345,7 +339,17 @@ const Schedule = (item) => {
                                                         <div className="activities_box" key={type_i}>
                                                             {Object.keys(timeLine[day_i][time_i][type_i]).map((activity_i) =>
                                                                 <span key={activity_i}>
-                                                                    <ActivityTeaser key={activity_i} item={timeLine[day_i][time_i][type_i][activity_i]} data={data} displayChange={setZoomInToActivity} idActivity={setFullActivityId} activityAmounts={timeLine[day_i][time_i]}></ActivityTeaser>
+                                                                    <ActivityTeaser
+                                                                        key={activity_i}
+                                                                        item={timeLine[day_i][time_i][type_i][activity_i]} 
+                                                                        displayChange={setZoomInToActivity}
+                                                                        idActivity={setFullActivityId}
+                                                                        activityAmounts={timeLine[day_i][time_i]}
+                                                                        getShowFullActivity={item.getShowFullActivity}
+                                                                        getFullActivityData={item.getFullActivityData}
+                                                                        timeLine={timeLine}
+                                                                        data={data}
+                                                                        ></ActivityTeaser>
                                                                 </span>
                                                             )}
                                                         </div>

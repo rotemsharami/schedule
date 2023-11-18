@@ -11,6 +11,13 @@ const ActivityTeaser = (item) => {
 	
 
 	const _zoomInToActivity = useCallback(() => {
+
+		item.getShowFullActivity(true);
+		item.getFullActivityData({
+			activityId: item.item.id,
+			timeLine: item.timeLine,
+		});
+
 		item.displayChange(true);
 		item.idActivity(item.item.id);
 	  }, [item.displayChange, item.idActivity]);

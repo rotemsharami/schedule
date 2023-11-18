@@ -16,7 +16,11 @@ const Content = (item) => {
 	return(
 		<div className="Content">
 			{item.selectedPage == "Schedule" ? 
-			<Schedule data={item.data}></Schedule>
+			<Schedule
+				data={item.data}
+				getShowFullActivity={item.getShowFullActivity}
+				getFullActivityData={item.getFullActivityData}
+				></Schedule>
 			: null}
 
 			{item.selectedPage == "NewsFlash" ? 

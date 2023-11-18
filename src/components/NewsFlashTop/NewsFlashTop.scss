@@ -1,0 +1,41 @@
+.NewsFlashTop {
+    width: 100%;
+    margin-top: 60px;
+    display: flex;
+    padding: 10px;
+    background: #012f32;
+    color: #FFF;
+    
+
+    .NewsflashItemBox{
+        width: 100%;
+    }
+
+    
+}
+
+
+
+.time{
+    font-size: 14px;
+    
+    width: 100%;
+}
+
+.headlines{
+font-size: 20px;
+font-weight: bold;
+}
+
+.datetime{
+    font-size: 14px;
+    margin: 2px 0px 0px 4px;
+}
+
+
+
+.description{
+font-size: 14px;
+}
+
+
