@@ -1,10 +1,11 @@
 import {React, useEffect, useState, useRef} from 'react';
 import './Schedule.scss';
 import moment from 'moment';
-import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity, FilterCircleFill, Check } from "react-bootstrap-icons";
+import { ArrowDown, MusicNoteBeamed, GeoAltFill, Activity, FilterCircleFill, Check, CalendarEvent } from "react-bootstrap-icons";
 import ActivityTeaser from '../ActivityTeaser/ActivityTeaser';
 import FullActivity from '../FullActivity/FullActivity';
 import { BsFillAlarmFill} from "react-icons/bs";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Schedule = (item) => {
     const [data, setData] = useState();
@@ -253,18 +254,26 @@ const Schedule = (item) => {
             </div>
             {/* <div>{ JSON.stringify(selectedDays, null, 2) }</div> */}
 
-
+            <AnimatePresence>
             {data != undefined  && showFilters ?
-            <div
+
+            
+
+            <motion.div
                 className="section_1"
                 style={{ 
                     // backgroundImage: `url(`+data.data.general_data.image+`)` 
                 }}
+
+                initial={{ y: -300, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -300, opacity: 0 }}
+                transition={{ duration: 0.3 }}
                 >
                 <div className="days filter_section">
                     {availableDays != undefined ?
                     <div className="days_box">
-                        <div className="filter_title"><span className='filter_title_icon'><BsFillAlarmFill/></span><span className='filter_title_text'>Days</span></div>
+                        <div className="filter_title"><span className='filter_title_icon'><CalendarEvent/></span><span className='filter_title_text'>Days</span></div>
                         <div className='filter_list'>
                             {availableDays.map((day_i) =>
                                 <button
@@ -282,7 +291,7 @@ const Schedule = (item) => {
                 </div>
                 <div className="types filter_section">
                     <div className="types_box">
-                    <div className="filter_title"><span className='filter_title_icon'><BsFillAlarmFill/></span><span className='filter_title_text'>Activities</span></div>
+                    <div className="filter_title"><span className='filter_title_icon'><Activity/></span><span className='filter_title_text'>Activities</span></div>
                         <div className='filter_list'>
                             {availableTypes.map((type_i) =>
                                 <button
@@ -299,7 +308,7 @@ const Schedule = (item) => {
                 </div>
                 <div className="dance_types filter_section">
                     <div className="types_box">
-                    <div className="filter_title"><span className='filter_title_icon'><BsFillAlarmFill/></span><span className='filter_title_text'>Dance Types</span></div>
+                    <div className="filter_title"><span className='filter_title_icon'><MusicNoteBeamed/></span><span className='filter_title_text'>Dance Types</span></div>
                         <div className='filter_list'>
                             {availableDanceTypes.map((type_i) =>
                                 <button
@@ -313,7 +322,8 @@ const Schedule = (item) => {
                         </div>
                     </div>
                 </div>
-            </div> : null}
+            </motion.div> : null}
+            </AnimatePresence>
             { timeLine != undefined ?
                 <span>
                     {Object.keys(timeLine).map((day_i) =>

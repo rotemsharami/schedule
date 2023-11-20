@@ -47,10 +47,12 @@
     .info_box{
         .title{
             font-size: 36px;
+            line-height: 36px;
         }
         .time{
             width: 100%;
             float: left;
+            margin-top: 10px;
             .time_item{
                 float: left;
                 margin: 0px 10px 0px 0px;
@@ -68,6 +70,8 @@
         .location{
             width: 100%;
             float: left;
+            margin-top: 5px;
+        
             .location_item{
                 float: left;
                 margin: 0px 10px 0px 0px;
@@ -114,8 +118,8 @@
 @media (max-width: 767px) and (orientation: portrait) {
     .full_activity
         .full_activity_container {
-        width: 100%;
-        margin-top: 0px;
+            width: 100%;
+            margin-top: 60px;
         .full_activity_box .preview,
         .full_activity_box .next {
             width: 30px;
