@@ -22,6 +22,36 @@ const Schedule = (item) => {
 
 	const windowSize = useRef([window.innerWidth, window.innerHeight]);
 	
+    const targetRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+
+    useEffect(() => {
+        const handleScroll = () => {
+          const targetElement = targetRef.current;
+    
+          if (targetElement) {
+            const { top, bottom } = targetElement.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+    
+            // Check if the top and bottom of the element are within the viewport
+            const isVisibleNow = top < windowHeight && bottom >= 0;
+    
+            setIsVisible(isVisibleNow);
+          }
+        };
+    
+        // Attach the event listener to the scroll event
+        window.addEventListener('scroll', handleScroll);
+    
+        // Remove the event listener when the component is unmounted
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, []); // Empty dependency array ensures that the effect runs only once on mount
+
+
+
     let getAvailableDays = async () => {
         let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
         let _days = {};
