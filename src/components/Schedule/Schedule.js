@@ -20,35 +20,36 @@ const Schedule = (item) => {
     const [zoomInToActivity, setZoomInToActivity] = useState(false);
     const [fullActivityId, setFullActivityId] = useState("1");
 
+    const [daysTitles, setDaysTitles] = useState();
+
+    const [scrollY, setScrollY] = useState(0);
+
 	const windowSize = useRef([window.innerWidth, window.innerHeight]);
 	
     const targetRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
 
+    const handleScroll = () => {
+        console.log(window.scrollY);
+
+        console.log(daysTitles);
+        
+        setScrollY(window.scrollY);
+        
+    };
+
     useEffect(() => {
-        const handleScroll = () => {
-          const targetElement = targetRef.current;
-    
-          if (targetElement) {
-            const { top, bottom } = targetElement.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-    
-            // Check if the top and bottom of the element are within the viewport
-            const isVisibleNow = top < windowHeight && bottom >= 0;
-    
-            setIsVisible(isVisibleNow);
-          }
-        };
-    
-        // Attach the event listener to the scroll event
+        // Add event listener when the component mounts
         window.addEventListener('scroll', handleScroll);
     
-        // Remove the event listener when the component is unmounted
+        // Remove event listener when the component unmounts
         return () => {
           window.removeEventListener('scroll', handleScroll);
         };
-      }, []); // Empty dependency array ensures that the effect runs only once on mount
+    }, []); // Empty dependency array ensures that the effect runs only once on mount and cleans up on unmount
+    
+    
 
 
 
@@ -179,6 +180,34 @@ const Schedule = (item) => {
                     });
                 }
             });
+
+            //setDaysTitles
+
+            console.log(time_line);
+
+            let _daysTitles = {};
+
+            Object.keys(time_line).forEach(dayKey => {
+                _daysTitles[dayKey] = 0;
+                Object.keys(time_line[dayKey]).forEach(timeKey => {
+                    Object.keys(time_line[dayKey][timeKey]).forEach(typeKey => {
+                        Object.keys(time_line[dayKey][timeKey][typeKey]).forEach(activityKey => {
+                            _daysTitles[dayKey] = _daysTitles[dayKey]+1;
+                        });
+                    });
+                });
+            });
+
+            
+            Object.keys(_daysTitles).forEach(dayKey => {
+                _daysTitles[dayKey] = (parseInt(_daysTitles[dayKey]) * 91) + 31;
+            });
+
+    
+            setDaysTitles(_daysTitles);
+
+            console.log(_daysTitles);
+
             return time_line;
         }
     }
