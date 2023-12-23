@@ -20,6 +20,7 @@ const Content = (item) => {
 				data={item.data}
 				getShowFullActivity={item.getShowFullActivity}
 				getFullActivityData={item.getFullActivityData}
+				timeLine={item.timeLine}
 				></Schedule>
 			: null}
 

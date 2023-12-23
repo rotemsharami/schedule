@@ -8,6 +8,8 @@ import { BsFillAlarmFill} from "react-icons/bs";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Schedule = (item) => {
+    console.log(item);
+
     const [data, setData] = useState();
     const [availableDays, setAvailableDays] = useState([]);
     const [timeLine, setTimeLine] = useState({});
@@ -19,39 +21,39 @@ const Schedule = (item) => {
     const [showFilters, setShowFilters] = useState(false);
     const [zoomInToActivity, setZoomInToActivity] = useState(false);
     const [fullActivityId, setFullActivityId] = useState("1");
-
     const [daysTitles, setDaysTitles] = useState();
-
     const [scrollY, setScrollY] = useState(0);
-
 	const windowSize = useRef([window.innerWidth, window.innerHeight]);
-	
     const targetRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
-
-
     const handleScroll = () => {
-        console.log(window.scrollY);
+        let scroll = parseInt(window.scrollY);
 
-        console.log(daysTitles);
-        
-        setScrollY(window.scrollY);
-        
+
+        // if(scroll < 75){
+        //     console.log("Hide fixed title");
+        // }else{
+        //     if(scroll > 75 && scroll < daysTitles[Object.keys(daysTitles)[0]]+75){
+        //         console.log("Show fixed title");
+        //         console.log(Object.keys(daysTitles)[0]);
+        //     }else{
+        //         for (let index = 0; index < Object.keys(daysTitles).length; index++) {
+        //             if(scroll >= daysTitles[Object.keys(daysTitles)[index]] && scroll < daysTitles[Object.keys(daysTitles)[index+1]] && (index+1) < Object.keys(daysTitles).length){
+        //                 console.log(Object.keys(daysTitles)[index+1]);
+        //             }
+        //         }
+        //     }
+        // }
+        // setScrollY(window.scrollY);
     };
 
     useEffect(() => {
-        // Add event listener when the component mounts
         window.addEventListener('scroll', handleScroll);
-    
-        // Remove event listener when the component unmounts
         return () => {
           window.removeEventListener('scroll', handleScroll);
         };
-    }, []); // Empty dependency array ensures that the effect runs only once on mount and cleans up on unmount
+    }, [daysTitles]);
     
-    
-
-
 
     let getAvailableDays = async () => {
         let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
@@ -150,7 +152,6 @@ const Schedule = (item) => {
                     let sorted_day_activities = day_activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
                     day_activities.forEach(activity => {
                         let validTypes = false;
-                        
                         if((selectedTypes.includes(activity.type) || selectedTypes.length === 0))
                             validTypes = true;
                         let validDanceTypes = false;
@@ -181,36 +182,38 @@ const Schedule = (item) => {
                 }
             });
 
-            //setDaysTitles
-
-            console.log(time_line);
-
-            let _daysTitles = {};
-
-            Object.keys(time_line).forEach(dayKey => {
-                _daysTitles[dayKey] = 0;
-                Object.keys(time_line[dayKey]).forEach(timeKey => {
-                    Object.keys(time_line[dayKey][timeKey]).forEach(typeKey => {
-                        Object.keys(time_line[dayKey][timeKey][typeKey]).forEach(activityKey => {
-                            _daysTitles[dayKey] = _daysTitles[dayKey]+1;
-                        });
-                    });
-                });
+            getDaysTitles(time_line).then((result) => {
+                setDaysTitles(pre => result);
             });
-
-            
-            Object.keys(_daysTitles).forEach(dayKey => {
-                _daysTitles[dayKey] = (parseInt(_daysTitles[dayKey]) * 91) + 31;
-            });
-
-    
-            setDaysTitles(_daysTitles);
-
-            console.log(_daysTitles);
 
             return time_line;
         }
     }
+
+
+    let getDaysTitles = async (time_line) => {
+        let _daysTitles = {};
+        Object.keys(time_line).forEach(dayKey => {
+            _daysTitles[dayKey] = 0;
+            Object.keys(time_line[dayKey]).forEach(timeKey => {
+                Object.keys(time_line[dayKey][timeKey]).forEach(typeKey => {
+                    Object.keys(time_line[dayKey][timeKey][typeKey]).forEach(activityKey => {
+                        _daysTitles[dayKey] = _daysTitles[dayKey]+1;
+                    });
+                });
+            });
+        });
+        Object.keys(_daysTitles).forEach(dayKey => {
+            _daysTitles[dayKey] = (parseInt(_daysTitles[dayKey]) * 91) + 31;
+        });
+        let current = 0;
+        for (let index = 0; index < Object.keys(_daysTitles).length; index++) {
+            current = current + _daysTitles[Object.keys(_daysTitles)[index]];
+            _daysTitles[Object.keys(_daysTitles)[index]] = current;
+        }
+        return _daysTitles;
+    }
+
 
     let dataToTimeLine = () => {
         let sorted = data.data.activities.sort(function(a, b){return (moment(a.start, 'YYYY-MM-DD HH:mm').unix()) - (moment(b.start, 'YYYY-MM-DD HH:mm').unix())});
@@ -237,6 +240,10 @@ const Schedule = (item) => {
 
     const setStartEndTime = (string, index) =>{
         return string.split("-")[index];
+    }
+
+    let updateTimeLine = async(_timeLine) => {
+        setTimeLine(pre=>_timeLine);
     }
 
     function start() {
@@ -272,7 +279,6 @@ const Schedule = (item) => {
         });
     }
 
-
 	useEffect(() => {
         if(data === undefined){
             let dance_floors = {};
@@ -299,98 +305,44 @@ const Schedule = (item) => {
                 });
             });
         }
-	}, [selectedDays,selectedTypes,selectedDanceTypes]);
+	}, [selectedDays, selectedTypes, selectedDanceTypes]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     return(
         <div className="schedule">
-            <div className='general_title'>
-                <div className='general_title_text'>Schedule</div>
-                <div className='general_title_buttun'>
-                    <button onClick={() => {setShowFilters(showFilters == false ? true : false)}}>
-                        <span className="button_icon"><FilterCircleFill/></span><span className='button_text'>Filter</span>
-                    </button>
-                </div>
-            </div>
             {/* <div>{ JSON.stringify(selectedDays, null, 2) }</div> */}
 
-            <AnimatePresence>
-            {data != undefined  && showFilters ?
+
 
             
 
-            <motion.div
-                className="section_1"
-                style={{ 
-                    // backgroundImage: `url(`+data.data.general_data.image+`)` 
-                }}
+            
 
-                initial={{ y: -300, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -300, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                >
-                <div className="days filter_section">
-                    {availableDays != undefined ?
-                    <div className="days_box">
-                        <div className="filter_title"><span className='filter_title_icon'><CalendarEvent/></span><span className='filter_title_text'>Days</span></div>
-                        <div className='filter_list'>
-                            {availableDays.map((day_i) =>
-                                <button
-                                    className={selectedDays.includes(day_i) ? 'active' : ''}
-                                    onClick={() => {changeDays(day_i)}}
-                                    key={day_i}
-                                >
-                                    <div className='checkbox'>{selectedDays.includes(day_i) ? <span className='checkebox_icon'><Check/></span>: null}</div>
-                                    <div className='filter_item_title'>{day_i}</div>
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                    : null }
-                </div>
-                <div className="types filter_section">
-                    <div className="types_box">
-                    <div className="filter_title"><span className='filter_title_icon'><Activity/></span><span className='filter_title_text'>Activities</span></div>
-                        <div className='filter_list'>
-                            {availableTypes.map((type_i) =>
-                                <button
-                                    className={selectedTypes.includes(type_i) ? 'active' : ''}
-                                    onClick={() => { changeTypes(type_i)}}
-                                    key={type_i}
-                                    >
-                                    <div className='checkbox'>{selectedTypes.includes(type_i) ? <span className='checkebox_icon'><Check/></span>:null}</div>
-                                    <div className='filter_item_title'>{data.data.activity_type[type_i].title}</div>
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div className="dance_types filter_section">
-                    <div className="types_box">
-                    <div className="filter_title"><span className='filter_title_icon'><MusicNoteBeamed/></span><span className='filter_title_text'>Dance Types</span></div>
-                        <div className='filter_list'>
-                            {availableDanceTypes.map((type_i) =>
-                                <button
-                                    onClick={() => { changeDanceTypes(type_i)}}
-                                    key={type_i}
-                                    >
-                                    <div className='checkbox'>{selectedDanceTypes.includes(type_i) ? <span className='checkebox_icon'><Check/></span>:null}</div>
-                                    <div className='filter_item_title'>{data.data.general_data.dance_floors[type_i].name}</div>
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </motion.div> : null}
-            </AnimatePresence>
-            { timeLine != undefined ?
+
+            
+
+            { item.timeLine != undefined ?
                 <span>
-                    {Object.keys(timeLine).map((day_i) =>
+                    {Object.keys(item.timeLine).map((day_i) =>
                         <span className='day' key={day_i}>
-                            { Object.keys(timeLine[day_i]).length > 0 ?
+                            { Object.keys(item.timeLine[day_i]).length > 0 ?
                                 <span>
                                 <div className='day_title'>{day_i}</div>
-                                    {Object.keys(timeLine[day_i]).map((time_i) =>
+                                    {Object.keys(item.timeLine[day_i]).map((time_i) =>
                                         <div className='activity_row' key={time_i}>
                                             <div className='time_box'>
                                                 <div className='time_box_inner'>
@@ -402,21 +354,21 @@ const Schedule = (item) => {
                                                     </div>  
                                                 </div>
                                             <div className='activities_box_list'>
-                                            {timeLine[day_i][time_i] != undefined ? 
+                                            {item.timeLine[day_i][time_i] != undefined ? 
                                                 <span>
-                                                    {Object.keys(timeLine[day_i][time_i]).map((type_i) =>
+                                                    {Object.keys(item.timeLine[day_i][time_i]).map((type_i) =>
                                                         <div className="activities_box" key={type_i}>
-                                                            {Object.keys(timeLine[day_i][time_i][type_i]).map((activity_i) =>
+                                                            {Object.keys(item.timeLine[day_i][time_i][type_i]).map((activity_i) =>
                                                                 <span key={activity_i}>
                                                                     <ActivityTeaser
                                                                         key={activity_i}
-                                                                        item={timeLine[day_i][time_i][type_i][activity_i]} 
+                                                                        item={item.timeLine[day_i][time_i][type_i][activity_i]} 
                                                                         displayChange={setZoomInToActivity}
                                                                         idActivity={setFullActivityId}
-                                                                        activityAmounts={timeLine[day_i][time_i]}
+                                                                        activityAmounts={item.timeLine[day_i][time_i]}
                                                                         getShowFullActivity={item.getShowFullActivity}
                                                                         getFullActivityData={item.getFullActivityData}
-                                                                        timeLine={timeLine}
+                                                                        timeLine={item.timeLine}
                                                                         data={data}
                                                                         ></ActivityTeaser>
                                                                 </span>
